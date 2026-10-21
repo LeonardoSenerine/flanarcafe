@@ -76,3 +76,14 @@
   line-height: 1.02;
   letter-spacing: -0.015em;
 }
+
+/* Grão da página 404 balançando devagar. */
+@keyframes balanco {
+  0%,
+  100% {
+    transform: rotate(-8deg);
+  }
+  50% {
+    transform: rotate(8deg);
+  }
+}

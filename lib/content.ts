@@ -1,5 +1,14 @@
 // Conteúdo do site num lugar só, pra facilitar a troca de textos e fotos.
 
+// Endereço público do site, usado nas meta tags, no sitemap e no robots.txt.
+// Com domínio próprio, basta definir NEXT_PUBLIC_SITE_URL na Vercel.
+export const site = {
+  url: (process.env.NEXT_PUBLIC_SITE_URL ?? "https://flanarcafe.vercel.app").replace(/\/$/, ""),
+  nome: "Flanar Café",
+  descricao:
+    "Café especial, focaccia artesanal, waffle de Liège e um salão verde pra ficar sem pressa no centro de Itatiba. Vem viver seu momento flanar.",
+};
+
 // Dados do perfil do Google e do Instagram da Flanar.
 export const contato = {
   endereco: "Rua Santa Clara, 90",

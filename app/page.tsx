@@ -7,10 +7,12 @@ import { Cardapio } from "@/components/Cardapio";
 import { Galeria } from "@/components/Galeria";
 import { ComoChegar } from "@/components/ComoChegar";
 import { Rodape } from "@/components/Rodape";
+import { DadosEstruturados } from "@/components/DadosEstruturados";
 
 export default function Home() {
   return (
     <>
+      <DadosEstruturados />
       <Header />
       <main>
         <Hero />

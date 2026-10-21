@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRef } from "react";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { contato, nav } from "@/lib/content";
@@ -61,7 +62,12 @@ export function Rodape() {
         ))}
       </p>
 
-      <p className="mt-6 text-center text-sm text-areia/75">© {new Date().getFullYear()} Flanar Café</p>
+      <p className="mt-6 text-center text-sm text-areia/75">
+        © {new Date().getFullYear()} Flanar Café ·{" "}
+        <Link href="/privacidade" className="underline-offset-4 hover:text-laranja hover:underline">
+          Política de privacidade
+        </Link>
+      </p>
     </footer>
   );
 }
