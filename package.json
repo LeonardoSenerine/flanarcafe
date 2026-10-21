@@ -8,7 +8,8 @@
     "start": "next start",
     "media": "node scripts/prepare-media.mjs",
     "logo": "node scripts/build-logo.mjs && node scripts/export-png.mjs",
-    "cardapio": "node scripts/prepare-cardapio.mjs"
+    "cardapio": "node scripts/prepare-cardapio.mjs",
+    "hero": "node scripts/prepare-hero.mjs"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",

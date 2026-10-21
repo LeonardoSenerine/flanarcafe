@@ -10,12 +10,15 @@ export type Item = {
 
 export type Adicional = { nome: string; preco: number };
 
+export type Foto = { src: string; alt: string; pos?: string };
+
 export type Grupo = {
   id: string;
   aba: string;
+  origem: string;
   titulo: string;
   texto: string;
-  fotos: { src: string; alt: string }[];
+  foto: Foto;
   itens: Item[];
   adicionais?: Adicional[];
 };
@@ -54,12 +57,10 @@ export const grupos: Grupo[] = [
   {
     id: "cafe-da-manha",
     aba: "Café da manhã",
+    origem: "Da cozinha",
     titulo: "Café da manhã",
     texto: "Ovos cremosos, focaccia artesanal e pão de queijo saindo quentinho.",
-    fotos: [
-      { src: "/cardapio/ovos.webp", alt: "Ovos mexidos com focaccia e tomate cereja assado" },
-      { src: "/cardapio/pao-de-queijo.webp", alt: "Mini pães de queijo" },
-    ],
+    foto: { src: "/fotos/ovos-mexidos.jpg", alt: "Ovos mexidos cremosos com cebolinha, no prato de cerâmica", pos: "50% 60%" },
     itens: [
       { nome: "Ovos mexidos simples", preco: 13.9, texto: "Ovos mexidos cremosos com cebolinha e pimenta do reino." },
       { nome: "Ovos mexidos com pão artesanal", preco: 20.9, texto: "Ovos mexidos cremosos com cebolinha e pimenta do reino, acompanhados do pão artesanal de focaccia." },
@@ -76,9 +77,10 @@ export const grupos: Grupo[] = [
   {
     id: "sanduiches",
     aba: "Sanduíches",
+    origem: "Da cozinha",
     titulo: "Sanduíches especiais",
     texto: "Todos no pão de focaccia artesanal, feito por aqui.",
-    fotos: [{ src: "/cardapio/sanduiches.webp", alt: "Os três sanduíches especiais na focaccia: tomate cereja, tuna melt e presunto e nozes" }],
+    foto: { src: "/fotos/sanduiche-focaccia-presunto-queijo.jpg", alt: "Sanduíche de presunto e queijo na focaccia artesanal", pos: "50% 55%" },
     itens: [
       { nome: "Tomate cereja", preco: 29.9, texto: "Focaccia recheada com pasta de queijo artesanal, tomate cereja assado e queijo parmesão ralado." },
       { nome: "Tuna melt", preco: 32.9, texto: "Focaccia recheada com rúcula, patê de atum, picles e queijo muçarela derretido." },
@@ -88,12 +90,10 @@ export const grupos: Grupo[] = [
   {
     id: "espressos",
     aba: "Espressos",
+    origem: "Do balcão",
     titulo: "Espressos e cappuccinos",
     texto: "Da dose curta ao cappuccino com Nutella.",
-    fotos: [
-      { src: "/cardapio/espresso.webp", alt: "Espresso caindo na caneca verde da Flanar" },
-      { src: "/cardapio/cappuccino-nutella.webp", alt: "Cappuccino de Nutella na taça de vidro" },
-    ],
+    foto: { src: "/fotos/trio-cafes.jpg", alt: "Cappuccinos e café com leite na caneca verde da Flanar, em cima da mesa", pos: "50% 60%" },
     itens: [
       { nome: "Espresso 40ml", preco: 9.9 },
       { nome: "Espresso duplo 80ml", preco: 14.9 },
@@ -108,12 +108,10 @@ export const grupos: Grupo[] = [
   {
     id: "da-casa",
     aba: "Da casa",
+    origem: "Do balcão",
     titulo: "Bebidas da casa",
     texto: "As receitas que só tem aqui, quentes e geladas.",
-    fotos: [
-      { src: "/cardapio/orange-coffee.webp", alt: "Orange coffee em camadas no copo canelado" },
-      { src: "/cardapio/leitinho.webp", alt: "Leitinho da vovó com canela por cima" },
-    ],
+    foto: { src: "/fotos/latte-gelado.jpg", alt: "Café gelado em camadas de leite e caramelo no copo canelado", pos: "50% 55%" },
     itens: [
       { nome: "Orange coffee", preco: 18.9, texto: "Xarope artesanal de laranja, leite gelado vaporizado e espresso. Um drink deliciosamente equilibrado.", temp: "gelado" },
       { nome: "Café caramelo", preco: 17.9, texto: "Leite vaporizado com uma dose de espresso e xarope de caramelo.", temp: "gelado" },
@@ -129,12 +127,10 @@ export const grupos: Grupo[] = [
   {
     id: "gelados",
     aba: "Gelados",
+    origem: "Do balcão",
     titulo: "Shakes e gelados",
     texto: "Pra dia quente, ou pra quem não abre mão de gelado.",
-    fotos: [
-      { src: "/cardapio/shake-ovomaltine.webp", alt: "Shake de Ovomaltine com chantilly" },
-      { src: "/cardapio/vem-verao.webp", alt: "Vem verão, infusão de maracujá com gengibre" },
-    ],
+    foto: { src: "/fotos/bebida-chantilly-cacau.jpg", alt: "Shake com chantilly e cacau no copo canelado", pos: "50% 40%" },
     itens: [
       { nome: "Shake de Ovomaltine", preco: 22.9, texto: "Leite gelado cremoso batido com Ovomaltine, finalizado com chantilly e Ovomaltine.", temp: "gelado" },
       { nome: "Shake de chocolate branco", preco: 21.9, texto: "Leite gelado cremoso batido com leite condensado, finalizado com chantilly e raspas de chocolate branco.", temp: "gelado" },
@@ -146,12 +142,10 @@ export const grupos: Grupo[] = [
   {
     id: "doces",
     aba: "Doces",
+    origem: "Da confeitaria",
     titulo: "Doces",
     texto: "Waffle de Liège, brownie, bolo de vó e companhia.",
-    fotos: [
-      { src: "/cardapio/iced-waffle.webp", alt: "Iced waffle com sorvete e fios de Nutella" },
-      { src: "/cardapio/caramel-slice.webp", alt: "Caramel slice com cobertura de chocolate" },
-    ],
+    foto: { src: "/fotos/waffle-calda-frutas-vermelhas.jpg", alt: "Calda de frutas vermelhas sendo derramada sobre o waffle de Liège", pos: "50% 50%" },
     itens: [
       { nome: "Waffle de Liège", preco: 23.9, texto: "Com um acompanhamento à escolha: doce de leite, geleia de frutas vermelhas ou Nutella." },
       { nome: "Iced waffle", preco: 28.9, texto: "Waffle com uma bola de sorvete e um acompanhamento: Nutella, doce de leite ou geleia de frutas vermelhas." },

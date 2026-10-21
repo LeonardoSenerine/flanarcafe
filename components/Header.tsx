@@ -9,13 +9,16 @@ export function Header() {
   const ref = useRef<HTMLElement>(null);
   const [open, setOpen] = useState(false);
 
-  // Some ao descer a página e volta ao subir.
+  // Some ao descer a página e volta ao subir. Dentro do cardápio fica escondido,
+  // porque o índice do cardápio ocupa o topo da tela.
   useGSAP(() => {
     ScrollTrigger.create({
       start: 0,
       end: "max",
       onUpdate: (self) => {
-        const hide = self.direction === 1 && self.scroll() > 240;
+        const indice = document.getElementById("cardapio-indice");
+        const noCardapio = !!indice && indice.getBoundingClientRect().top <= 1 && indice.parentElement!.getBoundingClientRect().bottom > 120;
+        const hide = noCardapio || (self.direction === 1 && self.scroll() > 240);
         gsap.to(ref.current, { yPercent: hide ? -160 : 0, duration: 0.45, ease: "power3.out", overwrite: true });
       },
     });
