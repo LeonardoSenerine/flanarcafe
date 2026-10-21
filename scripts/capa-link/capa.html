@@ -1,0 +1,79 @@
+<!doctype html>
+<!--
+  Capa de link da Flanar (1200x630), no mesmo formato da capa da SURAMU:
+  painel da marca à esquerda, foto à direita, selo no canto e filete embaixo.
+  Gere a imagem com: node scripts/capa-link/gerar.mjs
+-->
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Capa de link · Flanar Café</title>
+<style>
+  @font-face { font-family: "Bricolage"; src: url("fonts/bricolage-grotesque.woff2") format("woff2"); font-weight: 200 800; font-stretch: 75% 100%; }
+  @font-face { font-family: "Instrument"; src: url("fonts/instrument-sans.woff2") format("woff2"); font-weight: 400 700; }
+  :root { --verde: #3a4c26; --verde-escuro: #2c3a1c; --laranja: #e3723f; --areia: #d8c7b1; --leite: #f7f2ea; }
+  * { margin: 0; box-sizing: border-box; }
+  html, body { width: 1200px; height: 630px; overflow: hidden; background: var(--verde); }
+  .capa { position: relative; width: 1200px; height: 630px; overflow: hidden; background: var(--verde); font-family: "Instrument", sans-serif; color: var(--leite); }
+
+  /* Grãos do logo espalhados bem de leve, como a textura da capa da SURAMU. */
+  .textura { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0.09; }
+
+  /* Foto à direita, fundindo no verde pela esquerda. */
+  .foto { position: absolute; top: 0; right: 0; width: 700px; height: 630px; overflow: hidden;
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 28%); mask-image: linear-gradient(to right, transparent 0%, black 28%); }
+  .foto img { position: absolute; top: 0; left: -300px; height: 630px; width: auto; }
+
+  .texto { position: absolute; left: 64px; top: 56px; width: 620px; }
+  .logo { width: 250px; display: block; }
+  h1 { margin-top: 54px; font-family: "Bricolage"; font-weight: 800; font-stretch: 75%; font-variation-settings: "wdth" 75, "opsz" 96;
+    font-size: 104px; line-height: 0.84; letter-spacing: -0.02em; }
+  h1 em { font-style: normal; color: var(--laranja); }
+  .tarja { display: inline-block; margin-top: 26px; padding: 10px 18px 9px; background: var(--laranja); color: var(--verde);
+    font-weight: 700; font-size: 25px; letter-spacing: 0.1em; text-transform: uppercase; }
+  .itens { margin-top: 30px; white-space: nowrap; font-size: 23px; font-weight: 600; }
+  .itens span { color: var(--laranja); padding: 0 6px; }
+  .local { margin-top: 12px; font-size: 15px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: var(--areia); }
+
+  .selo { position: absolute; top: 34px; right: 40px; width: 168px; height: 168px; border-radius: 50%; background: var(--laranja);
+    box-shadow: 0 18px 40px -18px rgba(0,0,0,0.55); }
+  .selo svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .selo text { font-family: "Instrument"; font-weight: 700; font-size: 10.5px; letter-spacing: 0.12em; fill: var(--verde); text-transform: uppercase; }
+
+  .filete { position: absolute; left: 0; right: 0; bottom: 0; height: 10px; background: var(--laranja); }
+</style>
+</head>
+<body>
+<div class="capa">
+  <svg class="textura" aria-hidden="true">
+    <defs>
+      <pattern id="graos" width="150" height="130" patternUnits="userSpaceOnUse">
+        <g transform="translate(20 18) rotate(-18 23 25) scale(0.46)" fill="none" stroke="#f7f2ea" stroke-width="5"><path d="M79.23 6.89A42.08 53.98 37 1 0 14.26 93.11A42.08 53.98 37 1 0 79.23 6.89ZM77.25 16.57A30.18 42.51 37 1 1 26.09 84.47A30.18 42.51 37 1 1 77.25 16.57Z"/><path d="M66.89 24.2C61.58 36.32 46.7 43.33 33.52 48.64C23.32 53.53 16.95 61.82 13.12 71.38L19.07 83.71C25.87 70.32 37.14 64.58 49.25 59.06C61.15 53.32 67.95 41.63 66.89 24.2Z"/></g>
+        <g transform="translate(95 78) rotate(24 23 25) scale(0.36)" fill="none" stroke="#f7f2ea" stroke-width="6"><path d="M79.23 6.89A42.08 53.98 37 1 0 14.26 93.11A42.08 53.98 37 1 0 79.23 6.89ZM77.25 16.57A30.18 42.51 37 1 1 26.09 84.47A30.18 42.51 37 1 1 77.25 16.57Z"/></g>
+      </pattern>
+    </defs>
+    <rect width="100%" height="100%" fill="url(#graos)"/>
+  </svg>
+
+  <div class="foto"><img src="../../public/media/hero-cafe.jpg" alt=""></div>
+
+  <div class="texto">
+    <img class="logo" src="../../public/marca/flanar-horizontal-fundo-escuro.svg" alt="Flanar Café">
+    <h1>Vem viver seu<br>momento <em>flanar.</em></h1>
+    <p class="tarja">Café especial · feito na hora</p>
+    <p class="itens">Café da manhã<span>·</span>Focaccia<span>·</span>Waffle de Liège<span>·</span>Doces</p>
+    <p class="local">Centro · Itatiba, SP</p>
+  </div>
+
+  <div class="selo">
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <defs><path id="circulo" d="M50 50m-37 0a37 37 0 1 1 74 0a37 37 0 1 1 -74 0"/></defs>
+      <text textLength="230" lengthAdjust="spacing"><textPath href="#circulo" textLength="230" lengthAdjust="spacing">Café especial ✱ Sem pressa ✱</textPath></text>
+      <g transform="translate(34 33) scale(0.34)" fill="#3a4c26"><path fill-rule="evenodd" d="M79.23 6.89A42.08 53.98 37 1 0 14.26 93.11A42.08 53.98 37 1 0 79.23 6.89ZM77.25 16.57A30.18 42.51 37 1 1 26.09 84.47A30.18 42.51 37 1 1 77.25 16.57Z"/><path d="M66.89 24.2C61.58 36.32 46.7 43.33 33.52 48.64C23.32 53.53 16.95 61.82 13.12 71.38L19.07 83.71C25.87 70.32 37.14 64.58 49.25 59.06C61.15 53.32 67.95 41.63 66.89 24.2Z"/></g>
+    </svg>
+  </div>
+
+  <div class="filete"></div>
+</div>
+</body>
+</html>

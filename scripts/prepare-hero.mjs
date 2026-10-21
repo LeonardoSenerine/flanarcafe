@@ -2,8 +2,7 @@
 // O fundo da foto é só parede e mesa desfocadas, então as laterais são estendidas
 // esticando a primeira e a última coluna e desfocando: vira uma foto horizontal
 // com o copo à direita e espaço livre na parede para o título. No celular o hero
-// usa uma colagem das fotos de assets/fotos. Também gera a imagem de compartilhamento
-// (app/opengraph-image.jpg), com o logo na parede. Rode com: npm run hero
+// usa uma colagem das fotos de assets/fotos. Rode com: npm run hero
 import path from "node:path";
 import sharp from "sharp";
 
@@ -44,16 +43,3 @@ await sharp({ create: { width: W, height: H, channels: 3, background: "#888" } }
   .jpeg({ quality: 82, mozjpeg: true })
   .toFile(out);
 console.log("hero-cafe", `${W}x${H}`);
-
-
-// Imagem de compartilhamento (1200x630): mesma foto, cortada por cima, com o logo na parede.
-const OG = { w: 1200, h: 630 };
-const logo = await sharp(path.join(root, "public", "marca", "flanar-horizontal-fundo-claro.svg"), { density: 300 })
-  .resize({ width: 470 })
-  .toBuffer();
-await sharp(out)
-  .resize({ width: OG.w, height: OG.h, fit: "cover", position: "top" })
-  .composite([{ input: logo, left: 64, top: 70 }])
-  .jpeg({ quality: 86, mozjpeg: true })
-  .toFile(path.join(root, "app", "opengraph-image.jpg"));
-console.log("opengraph-image", `${OG.w}x${OG.h}`);
