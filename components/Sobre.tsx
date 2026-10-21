@@ -8,25 +8,29 @@ const texto =
   "A Flanar nasceu da vontade de desacelerar no meio da correria do centro de Itatiba. Parede verde-menta, mesas de madeira, poltronas de veludo e café passado sem pressa. Aqui dá pra chegar sozinho e começar o dia, marcar com a amiga, abrir o notebook ou só sentar perto da janela e ver a rua passar.";
 
 // Fotos do Instagram da Flanar; pos = enquadramento no rosto de cada uma.
+// No celular ficam numa grade (uma alta e duas menores); no desktop, sobrepostas.
 const fotos = [
   {
     src: "/pessoas/barista.jpg",
     alt: "Atendente da Flanar sorrindo enquanto passa a maquininha para uma cliente no balcão",
-    className: "right-0 top-0 w-[74%] aspect-[720/1000] rounded-[32px]",
+    posicao: "row-span-2 md:absolute md:right-0 md:top-0 md:w-[74%] md:aspect-[720/1000]",
+    forma: "rounded-[28px] md:rounded-[32px]",
     pos: "40% 45%",
     velocidade: -8,
   },
   {
     src: "/pessoas/cliente-shake.jpg",
     alt: "Cliente sorrindo com um shake no copo canelado, encostada na parede verde",
-    className: "left-0 top-[34%] w-[56%] aspect-[720/960] rounded-t-full rounded-b-[24px] ring-8 ring-areia",
+    posicao: "aspect-[4/5] md:absolute md:left-0 md:top-[34%] md:w-[56%] md:aspect-[720/960]",
+    forma: "rounded-[28px] md:rounded-t-full md:rounded-b-[24px] md:ring-8 md:ring-areia",
     pos: "45% 30%",
     velocidade: -22,
   },
   {
     src: "/pessoas/cliente-vem-verao.jpg",
     alt: "Cliente brindando com o Vem Verão, ao lado de uma planta",
-    className: "right-[4%] bottom-0 w-[44%] aspect-square rounded-full ring-8 ring-areia",
+    posicao: "aspect-[4/5] md:absolute md:right-[4%] md:bottom-0 md:w-[44%] md:aspect-square",
+    forma: "rounded-[28px] md:rounded-full md:ring-8 md:ring-areia",
     pos: "55% 30%",
     velocidade: -40,
   },
@@ -51,8 +55,22 @@ export function Sobre() {
           },
         );
 
-        // Fotos em profundidades diferentes.
-        gsap.utils.toArray<HTMLElement>(".sobre-foto").forEach((el) => {
+        // As pessoas aparecem uma a uma: a foto abre de baixo para cima,
+        // o rosto chega mais perto e a moldura se assenta no lugar.
+        gsap
+          .timeline({ scrollTrigger: { trigger: ".sobre-fotos", start: "top 78%" }, defaults: { ease: "expo.out" } })
+          .fromTo(
+            ".sobre-revela",
+            { clipPath: "inset(100% 0% 0% 0%)" },
+            { clipPath: "inset(0% 0% 0% 0%)", duration: 1.4, stagger: 0.18, ease: "expo.inOut" },
+          )
+          .from(".sobre-revela img", { scale: 1.45, duration: 2, stagger: 0.18 }, 0.2)
+          .from(".sobre-foto", { y: 60, rotate: (i) => [-4, 5, -6][i], duration: 1.6, stagger: 0.18 }, 0);
+      });
+
+      // Fotos em profundidades diferentes, só no desktop, onde elas se sobrepõem.
+      mm.add("(prefers-reduced-motion: no-preference) and (min-width: 768px)", () => {
+        gsap.utils.toArray<HTMLElement>(".sobre-camada").forEach((el) => {
           gsap.to(el, {
             yPercent: Number(el.dataset.velocidade),
             ease: "none",
@@ -82,10 +100,14 @@ export function Sobre() {
           </p>
         </div>
 
-        <div className="relative min-h-[118vw] md:col-span-5 md:min-h-0">
+        <div className="sobre-fotos relative grid grid-cols-2 gap-3 md:col-span-5 md:block">
           {fotos.map((f) => (
-            <div key={f.src} data-velocidade={f.velocidade} className={`sobre-foto absolute overflow-hidden ${f.className}`}>
-              <Image src={f.src} alt={f.alt} fill sizes="(min-width: 768px) 30vw, 70vw" className="object-cover" style={{ objectPosition: f.pos }} />
+            <div key={f.src} data-velocidade={f.velocidade} className={`sobre-camada relative ${f.posicao}`}>
+              <div className={`sobre-foto absolute inset-0 overflow-hidden ${f.forma}`}>
+                <div className="sobre-revela absolute inset-0">
+                  <Image src={f.src} alt={f.alt} fill sizes="(min-width: 768px) 30vw, 50vw" className="object-cover" style={{ objectPosition: f.pos }} />
+                </div>
+              </div>
             </div>
           ))}
         </div>

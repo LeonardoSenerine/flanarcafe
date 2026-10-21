@@ -16,10 +16,40 @@ const VERDE_CAPA = "#3b4c29";
 
 const orange = grupos.flatMap((g) => g.itens).find((i) => i.nome === "Orange coffee")!;
 
-// Foto horizontal no desktop (copo à direita) e vertical no celular (copo menor, embaixo).
+// No desktop, uma foto só: o Orange coffee na mesa, com o copo à direita. O <picture>
+// entrega um pixel vazio no celular, que mostra a colagem no lugar e não baixa a foto grande.
 const fotoAlt = "Orange coffee em camadas no copo canelado, sobre a mesa de madeira da Flanar, com a parede verde-menta atrás";
 const { props: fotoDesktop } = getImageProps({ src: "/media/hero-cafe.jpg", alt: fotoAlt, width: 3200, height: 1920, sizes: "100vw", priority: true });
-const { props: fotoCelular } = getImageProps({ src: "/media/hero-cafe-vertical.jpg", alt: fotoAlt, width: 1440, height: 3000, sizes: "100vw", priority: true });
+const PIXEL = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
+
+// Colagem do celular: o Orange coffee grande e os pratos da casa em volta,
+// todos na mesma forma, numa grade de 3x3.
+const colagem = [
+  { src: "/fotos/drink-laranja-camadas.jpg", alt: "Orange coffee em camadas no copo canelado", className: "col-span-2 row-span-2", pos: "50% 60%" },
+  { src: "/fotos/waffle-frutas.jpg", alt: "Waffle de Liège com frutas", className: "", pos: "50% 50%" },
+  { src: "/fotos/pao-de-queijo.jpg", alt: "Mini pães de queijo", className: "", pos: "40% 50%" },
+  { src: "/fotos/ovos-mexidos.jpg", alt: "Ovos mexidos com cebolinha", className: "", pos: "50% 60%" },
+  { src: "/fotos/trio-cafes.jpg", alt: "Cappuccinos e café com leite na caneca verde da Flanar", className: "col-span-2", pos: "50% 62%" },
+];
+
+// Selo laranja com texto girando em volta do grão.
+function Selo({ id, className }: { id: string; className: string }) {
+  return (
+    <div className={`hero-selo ${className}`}>
+      <div className="relative aspect-square rounded-full bg-laranja text-verde shadow-[0_18px_40px_-18px_rgba(0,0,0,0.6)]">
+        <svg viewBox="0 0 100 100" className="hero-selo-texto absolute inset-0 h-full w-full" aria-hidden>
+          <defs>
+            <path id={id} d="M50 50m-37 0a37 37 0 1 1 74 0a37 37 0 1 1 -74 0" />
+          </defs>
+          <text className="fill-verde text-[9.4px] font-bold tracking-[0.14em] uppercase">
+            <textPath href={`#${id}`}>café especial • feito na hora •</textPath>
+          </text>
+        </svg>
+        <Simbolo className="absolute inset-[33%] h-[34%] w-[34%] text-verde" />
+      </div>
+    </div>
+  );
+}
 
 // Horário de hoje, pelo dia da semana de quem está vendo.
 function useHorarioDeHoje() {
@@ -32,7 +62,8 @@ function useHorarioDeHoje() {
 }
 
 // Hero: a marca aparece como na capa do cardápio e, sem esperar o scroll, a
-// câmera entra pelo grão do logo e revela o Orange coffee em cima da mesa.
+// câmera entra pelo grão do logo e revela o Orange coffee em cima da mesa
+// (no celular, uma colagem com os pratos da casa).
 export function Hero() {
   const root = useRef<HTMLElement>(null);
   const furo = useRef<SVGPathElement>(null);
@@ -95,6 +126,7 @@ export function Hero() {
           .set(furo.current, { opacity: 1 }, "entrar+=0.15")
           .to(estado, { zoom: 30, centroY: 0.5, duration: 1.3, ease: "power3.in", onUpdate: aplicar }, "entrar+=0.15")
           .fromTo(".hero-foto", { scale: 1.3 }, { scale: 1, duration: 2.2, ease: "power3.out" }, "entrar+=0.5")
+          .from(".hero-tile", { scale: 0.82, autoAlpha: 0, duration: 1.2, stagger: 0.09 }, "entrar+=0.45")
           .set(".hero-intro", { autoAlpha: 0 }, "entrar+=1.45");
 
         // 3. O texto e os detalhes entram por cima da foto.
@@ -131,24 +163,24 @@ export function Hero() {
     <section
       id="topo"
       ref={root}
-      className="relative h-svh min-h-[560px] overflow-hidden [--foco:50%] md:[--foco:68%]"
+      className="relative h-svh min-h-[560px] overflow-hidden [--foco:68%]"
       style={{ backgroundColor: VERDE_CAPA }}
     >
       {/* O café, que aparece por dentro do grão */}
       <div className="hero-parallax absolute inset-0">
-        <div className="hero-foto absolute inset-0">
-          <picture>
+        <div className="hero-foto absolute inset-0 bg-areia-claro">
+          <picture className="hidden md:block">
             <source media="(min-width: 768px)" srcSet={fotoDesktop.srcSet ?? fotoDesktop.src} sizes={fotoDesktop.sizes} />
-            <img {...fotoCelular} alt={fotoAlt} className="absolute inset-0 h-full w-full object-cover object-[var(--foco)_50%]" />
+            <img src={PIXEL} alt={fotoAlt} fetchPriority="high" className="absolute inset-0 h-full w-full object-cover object-[var(--foco)_50%]" />
           </picture>
         </div>
       </div>
 
       {/* Mesma geometria da foto (cover, foco no copo) para os detalhes ficarem presos nele. */}
       <div className="hero-final invisible pointer-events-none absolute inset-0">
-        <div className="absolute inset-x-0 bottom-0 h-[62%] bg-gradient-to-t from-black/65 via-black/25 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 hidden h-[62%] bg-gradient-to-t from-black/65 via-black/25 to-transparent md:block" />
 
-        <div className="absolute top-1/2 left-[var(--foco)] aspect-[1440/3000] w-[max(100%,calc(100svh*1440/3000))] -translate-x-[var(--foco)] -translate-y-1/2 md:aspect-[3200/1920] md:w-[max(100%,calc(100svh*3200/1920))]">
+        <div className="absolute top-1/2 left-[var(--foco)] hidden aspect-[3200/1920] w-[max(100%,calc(100svh*3200/1920))] -translate-x-[var(--foco)] -translate-y-1/2 md:block">
           {/* Etiqueta do copo */}
           <div className="absolute top-[38%] left-[80.5%] hidden items-center gap-3 min-[1360px]:flex">
             <span className="hero-etiqueta-linha block h-px w-[4vw] bg-verde" aria-hidden />
@@ -158,24 +190,11 @@ export function Hero() {
             </p>
           </div>
 
-          {/* Selo que gira */}
-          <div className="hero-selo absolute top-[42%] left-[72%] w-[clamp(84px,9vw,150px)] -translate-x-1/2 md:top-[62%] md:left-[79%]">
-            <div className="relative aspect-square rounded-full bg-laranja text-verde shadow-[0_18px_40px_-18px_rgba(0,0,0,0.6)]">
-              <svg viewBox="0 0 100 100" className="hero-selo-texto absolute inset-0 h-full w-full" aria-hidden>
-                <defs>
-                  <path id="hero-selo-circulo" d="M50 50m-37 0a37 37 0 1 1 74 0a37 37 0 1 1 -74 0" />
-                </defs>
-                <text className="fill-verde text-[9.4px] font-bold tracking-[0.14em] uppercase">
-                  <textPath href="#hero-selo-circulo">café especial • feito na hora •</textPath>
-                </text>
-              </svg>
-              <Simbolo className="absolute inset-[33%] h-[34%] w-[34%] text-verde" />
-            </div>
-          </div>
+          <Selo id="hero-selo-desktop" className="absolute top-[62%] left-[79%] w-[clamp(84px,9vw,150px)] -translate-x-1/2" />
         </div>
 
-        <div className="relative flex h-full flex-col justify-between px-5 pt-[15svh] pb-7 md:px-12 md:pt-[17svh] md:pb-10">
-          <h1 className="display-tight text-[17vw] whitespace-nowrap text-verde md:text-[min(7.4vw,15svh)]">
+        <div className="relative flex h-full flex-col justify-between gap-4 px-5 pt-[92px] pb-6 md:px-12 md:pt-[17svh] md:pb-10">
+          <h1 className="display-tight text-[15vw] whitespace-nowrap text-verde md:text-[min(7.4vw,15svh)]">
             <span className="sr-only">Flanar Café. </span>
             <span className="block overflow-hidden pb-[0.06em]">
               <span className="hero-linha block">Vem viver seu</span>
@@ -187,26 +206,37 @@ export function Hero() {
             </span>
           </h1>
 
-          <div className="pointer-events-auto text-leite">
+          <div className="grid min-h-0 flex-1 grid-cols-3 grid-rows-3 gap-2.5 md:hidden" aria-hidden>
+            {colagem.map((f, i) => (
+              <div key={f.src} className={`hero-tile relative ${f.className}`}>
+                <div className="absolute inset-0 overflow-hidden rounded-[22px] bg-verde/10">
+                  <Image src={f.src} alt={f.alt} fill priority={i === 0} sizes={i === 0 ? "66vw" : "33vw"} className="object-cover" style={{ objectPosition: f.pos }} />
+                </div>
+                {i === 0 && <Selo id="hero-selo-celular" className="absolute -right-4 -bottom-4 z-10 w-[84px]" />}
+              </div>
+            ))}
+          </div>
+
+          <div className="pointer-events-auto text-verde md:text-leite">
             <div className="max-w-lg">
               <p className="hero-detalhe hidden text-lg leading-relaxed text-leite/90 md:block md:text-xl">
                 Cafés especiais, cozinha artesanal e um salão verde no centro de Itatiba.
               </p>
-              <div className="hero-detalhe mt-5 flex flex-wrap gap-3">
-                <a href="#cardapio" className="rounded-full bg-laranja px-6 py-3 font-semibold text-verde transition-colors hover:bg-leite">
+              <div className="hero-detalhe flex flex-wrap gap-3 md:mt-5">
+                <a href="#cardapio" className="rounded-full bg-verde px-6 py-3 font-semibold text-leite transition-colors hover:bg-verde-escuro md:bg-laranja md:text-verde md:hover:bg-leite">
                   Ver o cardápio
                 </a>
-                <a href="#como-chegar" className="rounded-full px-6 py-3 font-semibold text-leite ring-1 ring-leite/60 transition-colors hover:bg-leite/10">
+                <a href="#como-chegar" className="rounded-full px-6 py-3 font-semibold ring-1 ring-verde/40 transition-colors hover:bg-verde/10 md:ring-leite/60 md:hover:bg-leite/10">
                   Como chegar
                 </a>
               </div>
-              <ul className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm md:text-base">
+              <ul className="mt-4 flex flex-wrap gap-x-5 gap-y-1.5 text-sm md:mt-6 md:text-base">
                 <li className="hero-detalhe flex items-center gap-2">
-                  <span className="h-2 w-2 rounded-full bg-laranja" aria-hidden />
+                  <span className="h-2 w-2 rounded-full bg-laranja-escuro md:bg-laranja" aria-hidden />
                   {horas ? `Hoje, das ${horas}` : "Todos os dias, a partir das 8h"}
                 </li>
                 <li className="hero-detalhe flex items-center gap-2">
-                  <span className="h-2 w-2 rounded-full bg-laranja" aria-hidden />
+                  <span className="h-2 w-2 rounded-full bg-laranja-escuro md:bg-laranja" aria-hidden />
                   {contato.endereco}, {contato.bairro}
                 </li>
               </ul>

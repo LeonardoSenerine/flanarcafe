@@ -25,9 +25,9 @@ function Chama() {
 
 function Linha({ item }: { item: Item }) {
   return (
-    <li className="cardapio-item flex items-baseline justify-between gap-6 py-5">
+    <li className="cardapio-item flex items-baseline justify-between gap-4 py-4 md:gap-6 md:py-5">
       <div>
-        <h4 className="display-soft flex items-center gap-2 text-[1.35rem] md:text-[1.6rem]">
+        <h4 className="display-soft flex items-center gap-2 text-[1.2rem] md:text-[1.6rem]">
           {item.nome}
           {item.temp && (
             <span className="text-laranja-escuro">
@@ -36,16 +36,16 @@ function Linha({ item }: { item: Item }) {
             </span>
           )}
         </h4>
-        {item.texto && <p className="mt-1.5 max-w-[52ch] leading-relaxed text-verde/75">{item.texto}</p>}
+        {item.texto && <p className="mt-1 max-w-[52ch] text-[0.95rem] leading-relaxed text-verde/75 md:mt-1.5 md:text-base">{item.texto}</p>}
       </div>
-      <span className="shrink-0 text-lg font-bold tabular-nums">{reais(item.preco)}</span>
+      <span className="shrink-0 font-bold tabular-nums md:text-lg">{reais(item.preco)}</span>
     </li>
   );
 }
 
 function Adicionais({ lista }: { lista: Adicional[] }) {
   return (
-    <div className="cardapio-item mt-8 rounded-[24px] bg-verde/[0.06] p-6">
+    <div className="cardapio-item mt-8 rounded-[24px] bg-verde/[0.06] p-5 md:p-6">
       <p className="text-sm font-semibold tracking-[0.12em] text-laranja-escuro uppercase">Adicionais</p>
       <ul className="mt-3 space-y-2">
         {lista.map((a) => (
@@ -59,10 +59,11 @@ function Adicionais({ lista }: { lista: Adicional[] }) {
   );
 }
 
-// Toda seção tem a mesma moldura: retângulo alto de cantos arredondados.
+// Toda seção tem a mesma moldura de cantos arredondados: alta no desktop,
+// mais baixa no celular para a foto não ocupar a tela inteira.
 function Moldura({ numero, children }: { numero: number; children: React.ReactNode }) {
   return (
-    <div className="cardapio-moldura relative aspect-[4/5] overflow-hidden rounded-[32px] bg-verde-escuro">
+    <div className="cardapio-moldura relative aspect-[4/3] overflow-hidden rounded-[28px] bg-verde-escuro md:aspect-[4/5] md:rounded-[32px]">
       <div className="cardapio-zoom absolute inset-0">{children}</div>
       <span className="absolute top-5 left-5 rounded-full bg-leite/90 px-3.5 py-1.5 text-sm font-semibold text-verde tabular-nums backdrop-blur">
         {String(numero).padStart(2, "0")} / {String(secoes.length).padStart(2, "0")}
@@ -77,8 +78,8 @@ function Cabecalho({ id, numero, origem, titulo, texto, claro }: { id: string; n
       <p className={`cardapio-item text-sm font-semibold tracking-[0.14em] uppercase ${claro ? "text-laranja" : "text-laranja-escuro"}`}>
         {String(numero).padStart(2, "0")} · {origem}
       </p>
-      <h3 id={id} className="cardapio-item display-tight mt-4 text-[16vw] md:text-[6vw]">{titulo}</h3>
-      <p className="cardapio-item mt-5 max-w-[46ch] text-lg leading-relaxed opacity-85">{texto}</p>
+      <h3 id={id} className="cardapio-item display-tight mt-3 text-[14vw] md:mt-4 md:text-[6vw]">{titulo}</h3>
+      <p className="cardapio-item mt-4 max-w-[46ch] leading-relaxed opacity-85 md:mt-5 md:text-lg">{texto}</p>
     </>
   );
 }
@@ -90,9 +91,13 @@ const fundos = ["bg-white", "bg-leite"];
 function SecaoGrupo({ grupo, numero }: { grupo: Grupo; numero: number }) {
   const inverte = numero % 2 === 0;
   return (
-    <section id={`cardapio-${grupo.id}`} aria-labelledby={`titulo-${grupo.id}`} className={`cardapio-secao px-5 py-20 md:px-8 md:py-32 ${fundos[numero % 2]}`}>
-      <div className="mx-auto grid max-w-[1300px] gap-12 md:grid-cols-12 md:gap-16">
-        <div className={`md:col-span-5 ${inverte ? "md:order-2" : ""}`}>
+    <section id={`cardapio-${grupo.id}`} aria-labelledby={`titulo-${grupo.id}`} className={`cardapio-secao px-5 py-16 md:px-8 md:py-32 ${fundos[numero % 2]}`}>
+      {/* Celular: título, foto e lista, nessa ordem. Desktop: a foto ocupa a coluna inteira ao lado. */}
+      <div className="mx-auto grid max-w-[1300px] gap-8 md:grid-cols-12 md:gap-x-16 md:gap-y-10">
+        <div className={`md:col-span-7 md:row-start-1 ${inverte ? "md:col-start-1" : "md:col-start-6"}`}>
+          <Cabecalho id={`titulo-${grupo.id}`} numero={numero} origem={grupo.origem} titulo={grupo.titulo} texto={grupo.texto} />
+        </div>
+        <div className={`md:col-span-5 md:row-span-2 md:row-start-1 ${inverte ? "md:col-start-8" : "md:col-start-1"}`}>
           <div className="md:sticky md:top-28">
             <Moldura numero={numero}>
               <Image
@@ -106,9 +111,8 @@ function SecaoGrupo({ grupo, numero }: { grupo: Grupo; numero: number }) {
             </Moldura>
           </div>
         </div>
-        <div className="md:col-span-7">
-          <Cabecalho id={`titulo-${grupo.id}`} numero={numero} origem={grupo.origem} titulo={grupo.titulo} texto={grupo.texto} />
-          <ul className="mt-10 divide-y divide-verde/15 border-y border-verde/15">
+        <div className={`md:col-span-7 ${inverte ? "md:col-start-1" : "md:col-start-6"}`}>
+          <ul className="divide-y divide-verde/15 border-y border-verde/15">
             {grupo.itens.map((item) => (
               <Linha key={item.nome} item={item} />
             ))}
@@ -128,9 +132,12 @@ function SecaoMetodos({ numero }: { numero: number }) {
   const g = metodos.graos.find((o) => o.id === grao)!;
 
   return (
-    <section id="cardapio-metodos" aria-labelledby="titulo-metodos" className="cardapio-secao bg-verde px-5 py-20 text-leite md:px-8 md:py-32">
-      <div className="mx-auto grid max-w-[1300px] gap-12 md:grid-cols-12 md:gap-16">
-        <div className="md:col-span-5">
+    <section id="cardapio-metodos" aria-labelledby="titulo-metodos" className="cardapio-secao bg-verde px-5 py-16 text-leite md:px-8 md:py-32">
+      <div className="mx-auto grid max-w-[1300px] gap-8 md:grid-cols-12 md:gap-x-16 md:gap-y-10">
+        <div className="md:col-span-7 md:col-start-6 md:row-start-1">
+          <Cabecalho id="titulo-metodos" numero={numero} origem="Do balcão" titulo="Cafés especiais" texto={metodos.sobre} claro />
+        </div>
+        <div className="md:col-span-5 md:col-start-1 md:row-span-2 md:row-start-1">
           <div className="md:sticky md:top-28">
             <Moldura numero={numero}>
               <LoopVideo name="coar" label="Café saindo da prensa francesa direto para a caneca verde" className="absolute inset-0 h-full w-full object-cover" />
@@ -138,14 +145,12 @@ function SecaoMetodos({ numero }: { numero: number }) {
           </div>
         </div>
 
-        <div className="md:col-span-7">
-          <Cabecalho id="titulo-metodos" numero={numero} origem="Do balcão" titulo="Cafés especiais" texto={metodos.sobre} claro />
-
-          <div className="cardapio-item mt-10 flex items-baseline justify-between gap-4 border-t border-leite/20 pt-6">
+        <div className="md:col-span-7 md:col-start-6">
+          <div className="cardapio-item flex items-baseline justify-between gap-4 border-t border-leite/20 pt-6">
             <p className="display-soft text-2xl">1. Escolha o método</p>
             <span className="text-sm text-areia">{metodos.volume}</span>
           </div>
-          <div role="radiogroup" aria-label="Método de preparo" className="cardapio-item mt-5 grid grid-cols-3 gap-3">
+          <div role="radiogroup" aria-label="Método de preparo" className="cardapio-item mt-5 grid grid-cols-3 gap-2.5 md:gap-3">
             {metodos.opcoes.map((o) => (
               <button
                 key={o.id}
@@ -153,15 +158,15 @@ function SecaoMetodos({ numero }: { numero: number }) {
                 role="radio"
                 aria-checked={metodo === o.id}
                 onClick={() => setMetodo(o.id)}
-                className={`flex flex-col items-center rounded-[24px] bg-white p-3 pb-4 text-center text-verde ring-4 transition ${
+                className={`flex flex-col items-center rounded-[20px] bg-white p-2.5 pb-3 text-center text-verde ring-4 transition md:rounded-[24px] md:p-3 md:pb-4 ${
                   metodo === o.id ? "ring-laranja" : "ring-transparent hover:ring-leite/40"
                 }`}
               >
-                <span className="flex h-28 items-end md:h-36">
+                <span className="flex h-20 items-end md:h-36">
                   <Image src={o.foto} alt="" width={260} height={400} className="h-full w-auto mix-blend-multiply" />
                 </span>
-                <span className="mt-3 font-bold">{o.nome}</span>
-                <span className="text-sm text-laranja-escuro">{o.nota}</span>
+                <span className="mt-2 text-sm leading-tight font-bold md:mt-3 md:text-base">{o.nome}</span>
+                <span className="mt-0.5 text-xs leading-tight text-laranja-escuro md:text-sm">{o.nota}</span>
               </button>
             ))}
           </div>
