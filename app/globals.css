@@ -1,0 +1,78 @@
+@import "tailwindcss";
+
+/* Paleta oficial da Flanar, amostrada do logo e dos posts do Instagram.
+   Laranja só em texto grande ou decorativo: em texto pequeno não tem
+   contraste suficiente nem sobre o verde nem sobre a areia. */
+@theme {
+  --color-verde: #3a4c26;
+  --color-verde-escuro: #2c3a1c;
+  --color-verde-medio: #485938;
+  --color-laranja: #e3723f;
+  /* Um tom abaixo do laranja da marca, para títulos laranja sobre fundo
+     claro passarem do contraste mínimo de texto grande (3:1). */
+  --color-laranja-texto: #cf5f2b;
+  /* Fundo das etiquetas do cardápio: texto claro pequeno por cima (4.5:1). */
+  --color-laranja-escuro: #b54e1e;
+  --color-areia: #d8c7b1;
+  --color-areia-claro: #ece2d4;
+  --color-leite: #f7f2ea;
+
+  --font-sans: var(--font-instrument), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  html {
+    background: var(--color-areia);
+    color: var(--color-verde);
+  }
+  body {
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  :focus-visible {
+    outline: 3px solid currentColor;
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+  ::selection {
+    background: var(--color-laranja);
+    color: var(--color-verde);
+  }
+}
+
+/* Letreiro: a Bricolage no corte mais estreito e pesado. */
+@utility display-tight {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-variation-settings: "wdth" 75, "opsz" 96;
+  line-height: 0.82;
+  letter-spacing: -0.02em;
+}
+
+/* Par fino/pesado dos posts da Flanar ("Orange" fino, "coffee" pesado),
+   na mesma família, largura normal. */
+@utility display-fino {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-variation-settings: "wdth" 100, "opsz" 96;
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+}
+@utility display-forte {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-variation-settings: "wdth" 100, "opsz" 96;
+  line-height: 0.95;
+  letter-spacing: -0.035em;
+}
+
+/* Títulos menores: mesma família, largura normal. */
+@utility display-soft {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-variation-settings: "wdth" 90, "opsz" 48;
+  line-height: 1.02;
+  letter-spacing: -0.015em;
+}
