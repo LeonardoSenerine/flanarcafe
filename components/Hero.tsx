@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { simbolo, wordmark } from "@/lib/logo";
 
@@ -17,29 +17,33 @@ export function Hero() {
   const root = useRef<HTMLElement>(null);
   const furo = useRef<SVGPathElement>(null);
   const marca = useRef<SVGGElement>(null);
+  // Só para o viewBox do SVG; as animações leem o tamanho direto da janela.
   const [tela, setTela] = useState({ w: 1440, h: 900 });
 
-  useEffect(() => {
-    const medir = () => setTela({ w: window.innerWidth, h: window.innerHeight });
-    medir();
-    window.addEventListener("resize", medir);
-    return () => window.removeEventListener("resize", medir);
-  }, []);
-
+  // As animações são criadas uma vez só. Recriar o pin do hero ao medir a tela
+  // deixava as seções de baixo (o pin da bancada) com posições antigas.
   useGSAP(
     () => {
-      const { w, h } = tela;
-      const altura = w < 768 ? Math.min(w * 0.42, h * 0.24) : Math.min(w * 0.2, h * 0.3);
+      let w = window.innerWidth;
+      let h = window.innerHeight;
       const estado = { zoom: 1, giro: 0, centroY: 0.4 };
 
       // Mesma transformação para o grão laranja e para o furo da máscara.
       const aplicar = () => {
+        const altura = w < 768 ? Math.min(w * 0.42, h * 0.24) : Math.min(w * 0.2, h * 0.3);
         const s = (altura / simbolo.h) * estado.zoom;
         const t = `translate(${w / 2} ${h * estado.centroY}) rotate(${estado.giro}) scale(${s}) translate(${-simbolo.w / 2} ${-simbolo.h / 2})`;
         marca.current?.setAttribute("transform", t);
         furo.current?.setAttribute("transform", t);
       };
-      aplicar();
+      const medir = () => {
+        w = window.innerWidth;
+        h = window.innerHeight;
+        setTela({ w, h });
+        aplicar();
+      };
+      medir();
+      window.addEventListener("resize", medir);
 
       const mm = gsap.matchMedia();
       mm.add("(prefers-reduced-motion: no-preference)", () => {
@@ -74,8 +78,10 @@ export function Hero() {
           .fromTo(".hero-final", { autoAlpha: 0, y: 50 }, { autoAlpha: 1, y: 0, duration: 0.12 }, 0.82)
           .to({}, { duration: 0.1 });
       });
+
+      return () => window.removeEventListener("resize", medir);
     },
-    { scope: root, dependencies: [tela], revertOnUpdate: true },
+    { scope: root },
   );
 
   return (
@@ -84,7 +90,14 @@ export function Hero() {
 
       {/* O salão, que aparece por dentro do grão */}
       <div className="hero-foto absolute inset-0">
-        <Image src="/fotos/chocolate-quente.jpg" alt="" fill priority sizes="100vw" className="object-cover object-[50%_45%]" />
+        <Image
+          src="/pessoas/cliente-waffle.jpg"
+          alt="Cliente no salão da Flanar com waffle e café, olhando pela janela"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-[60%_38%]"
+        />
         <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-black/20" />
       </div>
 
@@ -134,9 +147,10 @@ export function Hero() {
       </div>
 
       {/* Quando a câmera termina de entrar */}
-      <div className="hero-final invisible absolute inset-0 flex flex-col items-center justify-end px-6 pb-[14svh] text-center text-leite">
-        <p className="display-tight text-[16vw] md:text-[8vw]">Vem viver seu momento flanar.</p>
-        <p className="mt-5 max-w-md text-lg text-leite/90">Cafés especiais, cardápio artesanal e um salão verde no centro de Itatiba.</p>
+      {/* Texto à esquerda para não cobrir o rosto da cliente, que fica à direita */}
+      <div className="hero-final invisible absolute inset-0 flex flex-col justify-end bg-gradient-to-r from-black/45 via-black/10 to-transparent px-6 pb-[12svh] text-leite md:px-12">
+        <p className="display-tight max-w-[9ch] text-[16vw] md:text-[7vw]">Vem viver seu momento flanar.</p>
+        <p className="mt-5 max-w-sm text-lg text-leite/90">Cafés especiais, cardápio artesanal e um salão verde no centro de Itatiba.</p>
       </div>
     </section>
   );

@@ -30,8 +30,6 @@ const clips = [
 // Fotos de pessoas: o "at" é o quadro mais nítido de cada trecho (medido pela
 // variância do laplaciano), e "melhorar" tira ruído e realça um pouco.
 const stills = [
-  { name: "salao", src: "09", at: 1.4, crop: [720, 1000, 0, 0], melhorar: true },
-  { name: "bandeja", src: "08", at: 10.4, crop: [720, 960, 0, 80], melhorar: true },
   { name: "janela", src: "08", at: 28.5, crop: [720, 720, 0, 0], melhorar: true },
   { name: "bolo-da-vovo", src: "03", at: 29, crop: [720, 900, 0, 0] },
   { name: "cookie", src: "03", at: 32, crop: [720, 900, 0, 0] },
@@ -71,3 +69,12 @@ for (const f of readdirSync(photosIn).filter((f) => f.endsWith(".jpg"))) {
   copyFileSync(path.join(photosIn, f), path.join(photosOut, f.replace(/^\d+-/, "")));
 }
 console.log("fotos copiadas");
+
+// Fotos de pessoas do Instagram da Flanar (originais em alta, sem legenda).
+const pessoasIn = path.join(root, "assets", "pessoas");
+const pessoasOut = path.join(root, "public", "pessoas");
+mkdirSync(pessoasOut, { recursive: true });
+for (const f of readdirSync(pessoasIn).filter((f) => f.endsWith(".jpg"))) {
+  copyFileSync(path.join(pessoasIn, f), path.join(pessoasOut, f));
+}
+console.log("pessoas copiadas");
