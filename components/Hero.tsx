@@ -7,6 +7,7 @@ import { simbolo, wordmark } from "@/lib/logo";
 import { grupos, reais } from "@/lib/cardapio";
 import { contato } from "@/lib/content";
 import { Simbolo } from "./Logo";
+import { Seta } from "./Seta";
 
 // Contorno externo do grão (primeiro trecho do anel): vira a "janela" do zoom.
 const graoExterno = simbolo.anel.slice(0, simbolo.anel.indexOf("M", 1));
@@ -223,11 +224,13 @@ export function Hero() {
                 Cafés especiais, cozinha artesanal e um salão verde no centro de Itatiba.
               </p>
               <div className="hero-detalhe flex flex-wrap gap-3 md:mt-5">
-                <a href="#cardapio" className="rounded-full bg-verde px-6 py-3 font-semibold text-leite transition-colors hover:bg-verde-escuro md:bg-laranja md:text-verde md:hover:bg-leite">
+                <a href="#cardapio" className="group inline-flex items-center gap-2 rounded-full bg-verde px-6 py-3 font-semibold text-leite transition-colors hover:bg-verde-escuro md:bg-laranja md:text-verde-noite md:hover:bg-leite">
                   Ver o cardápio
+                  <Seta direcao="baixo" />
                 </a>
-                <a href="#como-chegar" className="rounded-full px-6 py-3 font-semibold ring-1 ring-verde/40 transition-colors hover:bg-verde/10 md:ring-leite/60 md:hover:bg-leite/10">
+                <a href="#como-chegar" className="group inline-flex items-center gap-2 rounded-full px-6 py-3 font-semibold ring-1 ring-verde/40 transition-colors hover:bg-verde/10 md:ring-leite/60 md:hover:bg-leite/10">
                   Como chegar
+                  <Seta />
                 </a>
               </div>
               <ul className="mt-4 flex flex-wrap gap-x-5 gap-y-1.5 text-sm md:mt-6 md:text-base">
@@ -268,6 +271,7 @@ export function Hero() {
           width={854}
           height={600}
           priority
+          sizes="(min-width: 768px) 42vw, 78vw"
           className="hero-graos-topo pointer-events-none absolute [mask-image:linear-gradient(to_left,black_65%,transparent),linear-gradient(to_top,transparent,black_35%)] [mask-composite:intersect] -top-2 -right-2 w-[78vw] max-w-[640px] md:w-[42vw]"
         />
         <Image
@@ -276,6 +280,7 @@ export function Hero() {
           width={800}
           height={615}
           priority
+          sizes="(min-width: 768px) 30vw, 70vw"
           className="hero-graos-base pointer-events-none absolute [mask-image:linear-gradient(to_right,black_60%,transparent),linear-gradient(to_bottom,transparent,black_30%)] [mask-composite:intersect] -bottom-2 -left-2 w-[70vw] max-w-[520px] md:w-[30vw]"
         />
 

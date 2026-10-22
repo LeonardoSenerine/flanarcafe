@@ -20,7 +20,7 @@ export function PaginaSimples({ children, escura }: { children: React.ReactNode;
 
       <main className="flex-1">{children}</main>
 
-      <footer className={`px-5 py-8 text-sm md:px-8 ${escura ? "text-areia/75" : "text-verde/70"}`}>
+      <footer className={`px-5 py-8 text-sm md:px-8 ${escura ? "text-areia/90" : "text-verde/80"}`}>
         <div className="mx-auto flex max-w-[1400px] flex-wrap justify-between gap-3">
           <p>
             © {new Date().getFullYear()} Flanar Café · {contato.endereco}, {contato.bairro}

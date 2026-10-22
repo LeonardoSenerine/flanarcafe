@@ -1,31 +1,13 @@
-"use client";
-
 import Link from "next/link";
-import { useRef } from "react";
-import { gsap, useGSAP } from "@/lib/gsap";
 import { contato, nav } from "@/lib/content";
 import { LogoVertical } from "./Logo";
+import { AnimacoesRodape } from "./Animacoes";
 
 export function Rodape() {
-  const root = useRef<HTMLElement>(null);
-
-  useGSAP(
-    () => {
-      const mm = gsap.matchMedia();
-      mm.add("(prefers-reduced-motion: no-preference)", () => {
-        gsap.from(".rodape-letra", {
-          yPercent: 100,
-          stagger: 0.08,
-          ease: "none",
-          scrollTrigger: { trigger: ".rodape-palavra", start: "top bottom", end: "bottom bottom", scrub: true },
-        });
-      });
-    },
-    { scope: root },
-  );
 
   return (
-    <footer ref={root} className="overflow-hidden bg-verde px-5 pt-20 pb-6 text-areia md:px-8 md:pt-28">
+    <footer id="rodape" className="relative z-20 -mt-10 overflow-hidden rounded-t-[40px] bg-verde px-5 pt-20 pb-6 text-areia md:-mt-16 md:rounded-t-[64px] md:px-8 md:pt-28">
+      <AnimacoesRodape />
       <div className="mx-auto flex max-w-[1400px] flex-col gap-10 md:flex-row md:items-start md:justify-between">
         <div>
           <LogoVertical className="h-36 w-auto text-leite md:h-44" />
@@ -37,7 +19,7 @@ export function Rodape() {
           {contato.bairro}
           <br />
           {contato.horarios.map((h) => (
-            <span key={h.dias} className="block text-areia/85">
+            <span key={h.dias} className="block text-areia/90">
               {h.dias}, {h.horas}
             </span>
           ))}
@@ -62,7 +44,7 @@ export function Rodape() {
         ))}
       </p>
 
-      <p className="mt-6 text-center text-sm text-areia/75">
+      <p className="mt-6 text-center text-sm text-areia/90">
         © {new Date().getFullYear()} Flanar Café ·{" "}
         <Link href="/privacidade" className="underline-offset-4 hover:text-laranja hover:underline">
           Política de privacidade

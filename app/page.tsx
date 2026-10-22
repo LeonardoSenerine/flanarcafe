@@ -3,6 +3,7 @@ import { Hero } from "@/components/Hero";
 import { Faixas } from "@/components/Faixas";
 import { Sobre } from "@/components/Sobre";
 import { Processo } from "@/components/Processo";
+import { FaixaFoto } from "@/components/FaixaFoto";
 import { Cardapio } from "@/components/Cardapio";
 import { Galeria } from "@/components/Galeria";
 import { ComoChegar } from "@/components/ComoChegar";
@@ -19,6 +20,7 @@ export default function Home() {
         <Faixas />
         <Sobre />
         <Processo />
+        <FaixaFoto />
         <Cardapio />
         <Galeria />
         <ComoChegar />

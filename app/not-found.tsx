@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { PaginaSimples } from "@/components/PaginaSimples";
 import { Simbolo } from "@/components/Logo";
+import { Seta } from "@/components/Seta";
 
 export const metadata: Metadata = {
   title: "Página não encontrada",
@@ -19,15 +20,16 @@ export default function NaoEncontrada() {
           <span aria-hidden>4</span>
         </p>
         <h1 className="display-tight mt-6 text-[13vw] md:text-7xl">Essa mesa não existe</h1>
-        <p className="mt-5 max-w-[40ch] text-lg leading-relaxed text-areia/85">
+        <p className="mt-5 max-w-[40ch] text-lg leading-relaxed text-areia/90">
           A página que você procurou saiu do cardápio ou nunca esteve nele. Mas o café continua passando sem pressa.
         </p>
         <div className="mt-9 flex flex-wrap justify-center gap-3">
-          <Link href="/" className="rounded-full bg-laranja px-6 py-3 font-semibold text-verde transition-colors hover:bg-leite">
+          <Link href="/" className="rounded-full bg-laranja px-6 py-3 font-semibold text-verde-noite transition-colors hover:bg-leite">
             Voltar ao início
           </Link>
-          <Link href="/#cardapio" className="rounded-full px-6 py-3 font-semibold ring-1 ring-leite/60 transition-colors hover:bg-leite/10">
+          <Link href="/#cardapio" className="group inline-flex items-center gap-2 rounded-full px-6 py-3 font-semibold ring-1 ring-leite/60 transition-colors hover:bg-leite/10">
             Ver o cardápio
+            <Seta />
           </Link>
         </div>
       </div>
