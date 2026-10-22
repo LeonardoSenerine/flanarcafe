@@ -9,7 +9,6 @@
     "media": "node scripts/prepare-media.mjs",
     "logo": "node scripts/build-logo.mjs && node scripts/export-png.mjs",
     "cardapio": "node scripts/prepare-cardapio.mjs",
-    "hero": "node scripts/prepare-hero.mjs",
     "capa": "node scripts/capa-link/gerar.mjs"
   },
   "dependencies": {
