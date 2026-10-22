@@ -13,6 +13,24 @@ export function AnimacoesSobre() {
       const secao = document.getElementById("sobre")!;
       const mm = gsap.matchMedia();
       mm.add("(prefers-reduced-motion: no-preference)", () => {
+        // A foto do salão chega como cartão arredondado e se abre (igual à bancada),
+        // anda mais devagar que a página e o título sobe por cima.
+        const abertura = secao.querySelector(".sobre-abertura");
+        gsap.fromTo(
+          abertura,
+          { clipPath: "inset(0% 4% 0% 4% round 48px)" },
+          { clipPath: "inset(0% 0% 0% 0% round 0px)", ease: "none", scrollTrigger: { trigger: abertura, start: "top bottom", end: "top 15%", scrub: true } },
+        );
+        gsap.fromTo(
+          ".sobre-abertura-imagem",
+          { yPercent: -8 },
+          { yPercent: 8, ease: "none", scrollTrigger: { trigger: abertura, start: "top bottom", end: "bottom top", scrub: true } },
+        );
+        gsap
+          .timeline({ scrollTrigger: { trigger: abertura, start: "top 45%" }, defaults: { ease: "expo.out" } })
+          .from(".sobre-titulo", { yPercent: 110, duration: 1.2, stagger: 0.12 })
+          .from(".sobre-legenda", { y: 16, autoAlpha: 0, duration: 0.9 }, 0.3);
+
         // O texto vai "acendendo" palavra por palavra conforme a leitura. Começa em
         // 70% para continuar legível antes de acender (3:1, texto grande).
         gsap.fromTo(
@@ -174,7 +192,7 @@ export function AnimacoesComoChegar() {
             scrollTrigger: { trigger: ".mapa", start: "top 90%", end: "center 55%", scrub: true },
           },
         );
-        gsap.from(".janela", {
+        gsap.from(".fachada", {
           rotate: -25,
           scale: 0.6,
           ease: "none",

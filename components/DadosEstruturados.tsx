@@ -15,7 +15,7 @@ const dados = {
   name: site.nome,
   description: site.descricao,
   url: site.url,
-  image: `${site.url}/opengraph-image.jpg`,
+  image: [`${site.url}/fotos/fachada.jpg`, `${site.url}/fotos/salao-cappuccino-cookie.jpg`, `${site.url}/opengraph-image.jpg`],
   logo: `${site.url}/marca/flanar-avatar.svg`,
   menu: `${site.url}/#cardapio`,
   servesCuisine: ["Café especial", "Café da manhã", "Sanduíches", "Doces"],

@@ -55,9 +55,17 @@ export function ComoChegar() {
               referrerPolicy="no-referrer-when-downgrade"
             />
           </div>
-          <div className="janela absolute -bottom-10 -left-4 aspect-square w-[40%] overflow-hidden rounded-full ring-8 ring-verde-medio md:-bottom-12 md:-left-12 md:w-[30%]">
-            <Image src="/media/janela.jpg" alt="Vista da janela do salão para a rua" fill sizes="(min-width: 768px) 20vw, 40vw" className="object-cover" />
-          </div>
+          {/* A fachada, pra reconhecer de longe quem chega pela rua */}
+          <figure className="fachada absolute -bottom-12 -left-3 aspect-[3/4] w-[46%] overflow-hidden rounded-[28px] ring-8 ring-verde-medio md:-bottom-16 md:-left-12 md:w-[32%]">
+            <Image
+              src="/fotos/fachada.jpg"
+              alt="Fachada da Flanar Café: letreiro verde com o logo laranja, paredes laranja e a porta de entrada entre duas vitrines"
+              fill
+              sizes="(min-width: 768px) 22vw, 46vw"
+              className="object-cover object-[50%_45%]"
+            />
+            <figcaption className="absolute bottom-3 left-3 rounded-full bg-leite/90 px-3 py-1 text-sm font-semibold text-verde backdrop-blur">É aqui</figcaption>
+          </figure>
         </div>
       </div>
     </section>

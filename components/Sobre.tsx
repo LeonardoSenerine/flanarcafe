@@ -38,10 +38,39 @@ export function Sobre() {
   return (
     <section id="sobre" className="relative bg-areia px-5 pt-20 pb-28 md:px-8 md:pt-28 md:pb-44">
       <AnimacoesSobre />
+
+      {/* Abertura: o salão ao fundo, a mesa e o café na frente */}
+      <div className="sobre-abertura relative -mx-5 -mt-20 mb-16 h-[88svh] min-h-[520px] overflow-hidden bg-verde-escuro text-leite md:-mx-8 md:-mt-28 md:mb-28">
+        <div className="sobre-abertura-imagem absolute inset-x-0 -inset-y-[10%]">
+          <Image
+            src="/fotos/salao-cappuccino-cookie.jpg"
+            alt="Cappuccino com chantilly e cookie na mesa de madeira; ao fundo, o salão da Flanar com poltronas verdes de veludo, banquetas, luminárias de palha e plantas"
+            fill
+            sizes="100vw"
+            className="object-cover object-[50%_62%]"
+          />
+        </div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/10 to-transparent" />
+        <div className="relative mx-auto flex h-full max-w-[1400px] flex-col justify-end gap-5 px-5 pb-10 md:flex-row md:items-end md:justify-between md:px-8 md:pb-14">
+          <h2 className="display-tight text-[19vw] md:text-[9vw]">
+            <span className="block overflow-hidden pb-[0.06em]">
+              <span className="sobre-titulo block">Um café</span>
+            </span>
+            <span className="block overflow-hidden pb-[0.06em]">
+              <span className="sobre-titulo block">
+                pra ficar<span className="text-laranja">.</span>
+              </span>
+            </span>
+          </h2>
+          <p className="sobre-legenda max-w-[30ch] text-lg leading-snug text-leite/90 md:pb-[1vw] md:text-right">
+            Poltronas de veludo, mesas de madeira e café passado sem pressa.
+          </p>
+        </div>
+      </div>
+
       <div className="mx-auto grid max-w-[1400px] gap-20 md:grid-cols-12 md:gap-10">
         <div className="md:col-span-7">
-          <h2 className="display-tight text-[19vw] md:text-[8.5vw]">Um café pra ficar</h2>
-          <p className="sobre-texto display-soft mt-10 text-[1.75rem] leading-[1.15] md:mt-14 md:text-[2.6rem]">
+          <p className="sobre-texto display-soft text-[1.75rem] leading-[1.15] md:text-[2.6rem]">
             {texto.split(" ").map((palavra, i) => (
               <span key={i} className="sobre-palavra">
                 {palavra}{" "}
