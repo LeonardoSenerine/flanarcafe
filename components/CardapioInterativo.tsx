@@ -152,12 +152,16 @@ export function AnimacoesCardapio() {
         gsap.fromTo(
           secao.querySelector(".cardapio-zoom"),
           { scale: 1.25 },
-          { scale: 1, ease: "none", scrollTrigger: { trigger: secao, start: "top bottom", end: "bottom top", scrub: true } },
+          { scale: 1, ease: "none", scrollTrigger: { trigger: secao, start: "top bottom", end: "bottom top", scrub: 0.8 } },
         );
-        ScrollTrigger.batch(secao.querySelectorAll(".cardapio-item"), {
-          start: "top 88%",
+        // Os itens já começam escondidos: antes, eles apareciam, sumiam ao entrar
+        // na tela e só depois faziam o fade (o "pisca").
+        const itens = secao.querySelectorAll(".cardapio-item");
+        gsap.set(itens, { y: 28, autoAlpha: 0 });
+        ScrollTrigger.batch(itens, {
+          start: "top 92%",
           once: true,
-          onEnter: (itens) => gsap.from(itens, { y: 28, autoAlpha: 0, duration: 0.8, stagger: 0.06, ease: "power3.out" }),
+          onEnter: (lote) => gsap.to(lote, { y: 0, autoAlpha: 1, duration: 0.9, stagger: 0.05, ease: "power2.out", overwrite: true }),
         });
       });
     });

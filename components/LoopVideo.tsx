@@ -16,6 +16,17 @@ type Props = {
 export function LoopVideo({ name, className, label, preload = "none" }: Props) {
   const ref = useRef<HTMLVideoElement>(null);
   const [perto, setPerto] = useState(false);
+  // Só mostra o vídeo quando o pôster já carregou, com fade: sem isso o quadro
+  // aparecia de repente em cima do fundo.
+  const [pronto, setPronto] = useState(false);
+
+  useEffect(() => {
+    if (!perto) return;
+    const poster = new window.Image();
+    poster.onload = () => setPronto(true);
+    poster.onerror = () => setPronto(true);
+    poster.src = `/media/${name}.jpg`;
+  }, [perto, name]);
 
   useEffect(() => {
     const video = ref.current;
@@ -51,7 +62,7 @@ export function LoopVideo({ name, className, label, preload = "none" }: Props) {
   return (
     <video
       ref={ref}
-      className={className}
+      className={`${className ?? ""} transition-opacity duration-700 ease-out ${pronto ? "opacity-100" : "opacity-0"}`}
       src={perto ? `/media/${name}.mp4` : undefined}
       poster={perto ? `/media/${name}.jpg` : undefined}
       muted

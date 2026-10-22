@@ -91,3 +91,26 @@
     transform: rotate(8deg);
   }
 }
+
+/* Estado inicial da abertura, já no primeiro desenho da página: sem isso o
+   navegador mostra o resultado final por um instante e só depois a animação
+   começa (o "flick"). O GSAP leva cada peça do escondido ao visível. */
+@media (prefers-reduced-motion: no-preference) {
+  .entrada,
+  .cabecalho-entrada {
+    visibility: hidden;
+  }
+  .hero-nome {
+    clip-path: inset(0% 100% 0% 0%);
+  }
+}
+
+/* Sem animação: a abertura nem aparece e o hero já vem pronto. */
+@media (prefers-reduced-motion: reduce) {
+  .hero-intro {
+    display: none;
+  }
+  .hero-final {
+    visibility: visible;
+  }
+}

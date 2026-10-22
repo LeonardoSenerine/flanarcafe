@@ -32,7 +32,7 @@ export function Header() {
   });
 
   return (
-    <header ref={ref} className="fixed inset-x-0 top-0 z-50 px-3 pt-3 md:px-6 md:pt-4">
+    <header ref={ref} className="cabecalho-entrada fixed inset-x-0 top-0 z-50 px-3 pt-3 md:px-6 md:pt-4">
       <div className="mx-auto flex max-w-[1400px] items-center justify-between rounded-full bg-areia-claro/85 py-2 pr-2 pl-5 ring-1 ring-verde/10 backdrop-blur-md">
         <a href="#topo" aria-label="Flanar Café, voltar ao início" className="text-verde">
           <Logo title="" className="h-10 w-auto md:h-11" />

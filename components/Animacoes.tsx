@@ -19,12 +19,12 @@ export function AnimacoesSobre() {
         gsap.fromTo(
           abertura,
           { clipPath: "inset(0% 4% 0% 4% round 48px)" },
-          { clipPath: "inset(0% 0% 0% 0% round 0px)", ease: "none", scrollTrigger: { trigger: abertura, start: "top bottom", end: "top 15%", scrub: true } },
+          { clipPath: "inset(0% 0% 0% 0% round 0px)", ease: "none", scrollTrigger: { trigger: abertura, start: "top bottom", end: "top 15%", scrub: 0.8 } },
         );
         gsap.fromTo(
           ".sobre-abertura-imagem",
           { yPercent: -8 },
-          { yPercent: 8, ease: "none", scrollTrigger: { trigger: abertura, start: "top bottom", end: "bottom top", scrub: true } },
+          { yPercent: 8, ease: "none", scrollTrigger: { trigger: abertura, start: "top bottom", end: "bottom top", scrub: 0.8 } },
         );
         gsap
           .timeline({ scrollTrigger: { trigger: abertura, start: "top 45%" }, defaults: { ease: "expo.out" } })
@@ -40,7 +40,7 @@ export function AnimacoesSobre() {
             opacity: 1,
             stagger: 0.05,
             ease: "none",
-            scrollTrigger: { trigger: ".sobre-texto", start: "top 80%", end: "bottom 45%", scrub: true },
+            scrollTrigger: { trigger: ".sobre-texto", start: "top 80%", end: "bottom 45%", scrub: 0.8 },
           },
         );
 
@@ -55,17 +55,6 @@ export function AnimacoesSobre() {
           )
           .from(".sobre-revela img", { scale: 1.45, duration: 2, stagger: 0.18 }, 0.2)
           .from(".sobre-foto", { y: 60, rotate: (i) => [-4, 5, -6][i], duration: 1.6, stagger: 0.18 }, 0);
-      });
-
-      // Fotos em profundidades diferentes, só no desktop, onde elas se sobrepõem.
-      mm.add("(prefers-reduced-motion: no-preference) and (min-width: 768px)", () => {
-        gsap.utils.toArray<HTMLElement>(".sobre-camada").forEach((el) => {
-          gsap.to(el, {
-            yPercent: Number(el.dataset.velocidade),
-            ease: "none",
-            scrollTrigger: { trigger: secao, start: "top bottom", end: "bottom top", scrub: true },
-          });
-        });
       });
     },
   );
@@ -84,7 +73,7 @@ export function AnimacoesProcesso() {
         gsap.fromTo(
           secao,
           { clipPath: "inset(0% 4% 0% 4% round 48px)" },
-          { clipPath: "inset(0% 0% 0% 0% round 0px)", ease: "none", scrollTrigger: { trigger: secao, start: "top bottom", end: "top 15%", scrub: true } },
+          { clipPath: "inset(0% 0% 0% 0% round 0px)", ease: "none", scrollTrigger: { trigger: secao, start: "top bottom", end: "top 15%", scrub: 0.8 } },
         );
       });
       mm.add("(prefers-reduced-motion: no-preference) and (min-width: 768px)", () => {
@@ -189,14 +178,14 @@ export function AnimacoesComoChegar() {
           {
             clipPath: "circle(75% at 50% 50%)",
             ease: "none",
-            scrollTrigger: { trigger: ".mapa", start: "top 90%", end: "center 55%", scrub: true },
+            scrollTrigger: { trigger: ".mapa", start: "top 90%", end: "center 55%", scrub: 0.8 },
           },
         );
         gsap.from(".fachada", {
           rotate: -25,
           scale: 0.6,
           ease: "none",
-          scrollTrigger: { trigger: ".mapa", start: "top 90%", end: "center 55%", scrub: true },
+          scrollTrigger: { trigger: ".mapa", start: "top 90%", end: "center 55%", scrub: 0.8 },
         });
       });
     },
@@ -213,7 +202,7 @@ export function AnimacoesRodape() {
           yPercent: 100,
           stagger: 0.08,
           ease: "none",
-          scrollTrigger: { trigger: ".rodape-palavra", start: "top bottom", end: "bottom bottom", scrub: true },
+          scrollTrigger: { trigger: ".rodape-palavra", start: "top bottom", end: "bottom bottom", scrub: 0.8 },
         });
       });
     },
@@ -230,7 +219,7 @@ export function AnimacoesFaixaFoto() {
       gsap.fromTo(
         ".faixafoto-imagem",
         { yPercent: -10 },
-        { yPercent: 10, ease: "none", scrollTrigger: { trigger: secao, start: "top bottom", end: "bottom top", scrub: true } },
+        { yPercent: 10, ease: "none", scrollTrigger: { trigger: secao, start: "top bottom", end: "bottom top", scrub: 0.8 } },
       );
       gsap
         .timeline({ scrollTrigger: { trigger: secao, start: "top 55%" }, defaults: { ease: "expo.out" } })

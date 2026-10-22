@@ -1,6 +1,6 @@
 "use client";
 
-import Image, { getImageProps } from "next/image";
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { simbolo, wordmark } from "@/lib/logo";
@@ -17,21 +17,18 @@ const VERDE_CAPA = "#3b4c29";
 
 const orange = grupos.flatMap((g) => g.itens).find((i) => i.nome === "Orange coffee")!;
 
-// No desktop, uma foto só: o Orange coffee na mesa, com o copo à direita. O <picture>
-// entrega um pixel vazio no celular, que mostra a colagem no lugar e não baixa a foto grande.
-const fotoAlt = "Orange coffee em camadas no copo canelado, sobre a mesa de madeira da Flanar, com a parede verde-menta atrás";
-const { props: fotoDesktop } = getImageProps({ src: "/media/hero-cafe.jpg", alt: fotoAlt, width: 3200, height: 1920, sizes: "100vw", priority: true });
-const PIXEL = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
-
-// Colagem do celular: o Orange coffee grande e os pratos da casa em volta,
-// todos na mesma forma, numa grade de 3x3.
+// Colagem: o Orange coffee grande e os pratos da casa em volta, todos na mesma
+// forma, numa grade de 3x3. "fundo" é a profundidade do efeito do mouse (desktop).
 const colagem = [
-  { src: "/fotos/drink-laranja-camadas.jpg", alt: "Orange coffee em camadas no copo canelado", className: "col-span-2 row-span-2", pos: "50% 60%" },
-  { src: "/fotos/waffle-frutas.jpg", alt: "Waffle de Liège com frutas", className: "", pos: "50% 50%" },
-  { src: "/fotos/pao-de-queijo.jpg", alt: "Mini pães de queijo", className: "", pos: "40% 50%" },
-  { src: "/fotos/ovos-mexidos.jpg", alt: "Ovos mexidos com cebolinha", className: "", pos: "50% 60%" },
-  { src: "/fotos/trio-cafes.jpg", alt: "Cappuccinos e café com leite na caneca verde da Flanar", className: "col-span-2", pos: "50% 62%" },
+  { src: "/fotos/drink-laranja-camadas.jpg", alt: "Orange coffee em camadas no copo canelado", className: "col-span-2 row-span-2", pos: "50% 60%", fundo: 6 },
+  { src: "/fotos/waffle-frutas.jpg", alt: "Waffle de Liège com frutas", className: "", pos: "50% 50%", fundo: 14 },
+  { src: "/fotos/pao-de-queijo.jpg", alt: "Mini pães de queijo", className: "", pos: "40% 50%", fundo: 10 },
+  { src: "/fotos/ovos-mexidos.jpg", alt: "Ovos mexidos com cebolinha", className: "", pos: "50% 60%", fundo: 12 },
+  { src: "/fotos/trio-cafes.jpg", alt: "Cappuccinos e café com leite na caneca verde da Flanar", className: "col-span-2", pos: "50% 62%", fundo: 8 },
 ];
+
+// Sem JavaScript, mostra o hero pronto (as animações começam escondidas no CSS).
+const semScript = ".hero-final{visibility:visible!important}.hero-intro{display:none}.entrada,.cabecalho-entrada{visibility:visible!important}";
 
 // Selo laranja com texto girando em volta do grão.
 function Selo({ id, className }: { id: string; className: string }) {
@@ -63,8 +60,9 @@ function useHorarioDeHoje() {
 }
 
 // Hero: a marca aparece como na capa do cardápio e, sem esperar o scroll, a
-// câmera entra pelo grão do logo e revela o Orange coffee em cima da mesa
-// (no celular, uma colagem com os pratos da casa).
+// câmera entra pelo grão do logo e revela a colagem com os pratos da casa.
+// Tudo que anima já começa escondido no CSS (globals.css), então a página
+// nunca mostra o resultado final antes de a animação começar.
 export function Hero() {
   const root = useRef<HTMLElement>(null);
   const furo = useRef<SVGPathElement>(null);
@@ -109,14 +107,14 @@ export function Hero() {
 
         // 1. A capa do cardápio ganhando vida.
         tl.set(".hero-final", { autoAlpha: 1 })
-          .from(header, { autoAlpha: 0, y: -30, duration: 1 }, 0.2)
+          .fromTo(header, { autoAlpha: 0, y: -30 }, { autoAlpha: 1, y: 0, duration: 1 }, 0.2)
           .fromTo(estado, { zoom: 0.4, giro: -80 }, { zoom: 1, giro: 0, duration: 1.6, onUpdate: aplicar }, 0)
-          .from(marca.current, { opacity: 0, duration: 0.7 }, 0)
+          .fromTo(marca.current, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.7 }, 0)
           .from(".hero-vinco", { scale: 0, transformOrigin: "85% 10%", duration: 1.2 }, 0.4)
           .fromTo(".hero-nome", { clipPath: "inset(0% 100% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 1.2, ease: "power3.inOut" }, 0.55)
-          .from(".hero-cafe", { y: 16, autoAlpha: 0, duration: 0.9 }, 1.2)
-          .from(".hero-graos-topo", { xPercent: 30, yPercent: -30, autoAlpha: 0, duration: 1.6 }, 0.1)
-          .from(".hero-graos-base", { xPercent: -30, yPercent: 30, autoAlpha: 0, duration: 1.6 }, 0.2);
+          .fromTo(".hero-cafe", { y: 16, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.9 }, 1.2)
+          .fromTo(".hero-graos-topo", { xPercent: 30, yPercent: -30, autoAlpha: 0 }, { xPercent: 0, yPercent: 0, autoAlpha: 1, duration: 1.6 }, 0.1)
+          .fromTo(".hero-graos-base", { xPercent: -30, yPercent: 30, autoAlpha: 0 }, { xPercent: 0, yPercent: 0, autoAlpha: 1, duration: 1.6 }, 0.2);
 
         // 2. Sozinha, a câmera entra pelo grão até o café ocupar a tela.
         tl.addLabel("entrar", 2.3)
@@ -126,8 +124,7 @@ export function Hero() {
           .to(".hero-vinco", { opacity: 0, duration: 0.3, ease: "none" }, "entrar")
           .set(furo.current, { opacity: 1 }, "entrar+=0.15")
           .to(estado, { zoom: 30, centroY: 0.5, duration: 1.3, ease: "power3.in", onUpdate: aplicar }, "entrar+=0.15")
-          .fromTo(".hero-foto", { scale: 1.3 }, { scale: 1, duration: 2.2, ease: "power3.out" }, "entrar+=0.5")
-          .from(".hero-tile", { scale: 0.82, autoAlpha: 0, duration: 1.2, stagger: 0.09 }, "entrar+=0.45")
+          .from(".hero-tile", { scale: 0.82, autoAlpha: 0, duration: 1.3, stagger: 0.09 }, "entrar+=0.45")
           .set(".hero-intro", { autoAlpha: 0 }, "entrar+=1.45");
 
         // 3. O texto e os detalhes entram por cima da foto.
@@ -135,8 +132,7 @@ export function Hero() {
           .from(".hero-linha", { yPercent: 110, duration: 1.1, stagger: 0.12 }, "final")
           .from(".hero-detalhe", { y: 24, autoAlpha: 0, duration: 0.9, stagger: 0.08 }, "final+=0.35")
           .from(".hero-selo", { scale: 0, rotate: -120, duration: 1.4 }, "final+=0.3")
-          .from(".hero-etiqueta-linha", { scaleX: 0, transformOrigin: "0% 50%", duration: 0.8, ease: "power3.inOut" }, "final+=0.5")
-          .from(".hero-etiqueta-texto", { x: -16, autoAlpha: 0, duration: 0.8 }, "final+=0.9");
+          .from(".hero-etiqueta", { y: -10, autoAlpha: 0, duration: 0.8 }, "final+=0.5");
 
         // Quem já quer descer não precisa esperar: qualquer gesto acelera a entrada.
         const pressa = () => tl.timeScale(3.5);
@@ -145,14 +141,28 @@ export function Hero() {
 
         gsap.to(".hero-selo-texto", { rotate: 360, duration: 18, repeat: -1, ease: "none", transformOrigin: "50% 50%" });
 
-        // Depois da entrada, a foto fica mais lenta que a página ao rolar.
-        gsap.to(".hero-parallax", {
-          yPercent: 14,
-          ease: "none",
-          scrollTrigger: { trigger: root.current, start: "top top", end: "bottom top", scrub: true },
-        });
-
         return () => eventos.forEach((e) => window.removeEventListener(e, pressa));
+      });
+
+      // Desktop com mouse: as fotos da colagem acompanham o cursor em
+      // profundidades diferentes, bem de leve.
+      mm.add("(prefers-reduced-motion: no-preference) and (min-width: 768px) and (pointer: fine)", () => {
+        const tiles = gsap.utils.toArray<HTMLElement>(".hero-tile-fundo");
+        const movers = tiles.map((el) => ({
+          x: gsap.quickTo(el, "x", { duration: 1.2, ease: "power3.out" }),
+          y: gsap.quickTo(el, "y", { duration: 1.2, ease: "power3.out" }),
+          fundo: Number(el.dataset.fundo),
+        }));
+        const mover = (e: PointerEvent) => {
+          const nx = e.clientX / window.innerWidth - 0.5;
+          const ny = e.clientY / window.innerHeight - 0.5;
+          movers.forEach((m) => {
+            m.x(-nx * m.fundo * 2);
+            m.y(-ny * m.fundo * 2);
+          });
+        };
+        window.addEventListener("pointermove", mover);
+        return () => window.removeEventListener("pointermove", mover);
       });
 
       return () => window.removeEventListener("resize", medir);
@@ -164,38 +174,19 @@ export function Hero() {
     <section
       id="topo"
       ref={root}
-      className="relative h-svh min-h-[560px] overflow-hidden [--foco:68%]"
+      className="relative h-svh min-h-[560px] overflow-hidden"
       style={{ backgroundColor: VERDE_CAPA }}
     >
-      {/* O café, que aparece por dentro do grão */}
-      <div className="hero-parallax absolute inset-0">
-        <div className="hero-foto absolute inset-0 bg-areia-claro">
-          <picture className="hidden md:block">
-            <source media="(min-width: 768px)" srcSet={fotoDesktop.srcSet ?? fotoDesktop.src} sizes={fotoDesktop.sizes} />
-            <img src={PIXEL} alt={fotoAlt} fetchPriority="high" className="absolute inset-0 h-full w-full object-cover object-[var(--foco)_50%]" />
-          </picture>
-        </div>
+      <noscript dangerouslySetInnerHTML={{ __html: `<style>${semScript}</style>` }} />
+
+      {/* Fundo claro que aparece por dentro do grão, com o grão do logo bem grande e apagado */}
+      <div className="hero-foto absolute inset-0 overflow-hidden bg-areia-claro">
+        <Simbolo className="absolute -bottom-[18%] -left-[8%] h-[80%] w-auto text-verde/[0.05] md:-bottom-[25%] md:-left-[6%] md:h-[115%]" />
       </div>
 
-      {/* Mesma geometria da foto (cover, foco no copo) para os detalhes ficarem presos nele. */}
       <div className="hero-final invisible pointer-events-none absolute inset-0">
-        <div className="absolute inset-x-0 bottom-0 hidden h-[62%] bg-gradient-to-t from-black/65 via-black/25 to-transparent md:block" />
-
-        <div className="absolute top-1/2 left-[var(--foco)] hidden aspect-[3200/1920] w-[max(100%,calc(100svh*3200/1920))] -translate-x-[var(--foco)] -translate-y-1/2 md:block">
-          {/* Etiqueta do copo */}
-          <div className="absolute top-[38%] left-[80.5%] hidden items-center gap-3 min-[1360px]:flex">
-            <span className="hero-etiqueta-linha block h-px w-[4vw] bg-verde" aria-hidden />
-            <p className="hero-etiqueta-texto text-verde">
-              <span className="display-soft block text-2xl">{orange.nome}</span>
-              <span className="block text-sm font-medium">A bebida da casa · {reais(orange.preco)}</span>
-            </p>
-          </div>
-
-          <Selo id="hero-selo-desktop" className="absolute top-[62%] left-[79%] w-[clamp(84px,9vw,150px)] -translate-x-1/2" />
-        </div>
-
-        <div className="relative flex h-full flex-col justify-between gap-4 px-5 pt-[92px] pb-6 md:px-12 md:pt-[17svh] md:pb-10">
-          <h1 className="display-tight text-[15vw] whitespace-nowrap text-verde md:text-[min(7.4vw,15svh)]">
+        <div className="relative flex h-full flex-col gap-4 px-5 pt-[92px] pb-6 md:grid md:grid-cols-12 md:grid-rows-[1fr_auto_auto_1fr] md:gap-x-12 md:gap-y-0 md:px-12 md:pt-[108px] md:pb-10">
+          <h1 className="display-tight text-[15vw] whitespace-nowrap text-verde md:col-span-6 md:row-start-2 md:text-[min(6vw,12svh)]">
             <span className="sr-only">Flanar Café. </span>
             <span className="block overflow-hidden pb-[0.06em]">
               <span className="hero-linha block">Vem viver seu</span>
@@ -207,39 +198,56 @@ export function Hero() {
             </span>
           </h1>
 
-          <div className="grid min-h-0 flex-1 grid-cols-3 grid-rows-3 gap-2.5 md:hidden" aria-hidden>
+          <div className="grid min-h-0 flex-1 grid-cols-3 grid-rows-3 gap-2.5 md:col-span-6 md:col-start-7 md:row-span-4 md:row-start-1 md:gap-4" aria-hidden>
             {colagem.map((f, i) => (
               <div key={f.src} className={`hero-tile relative ${f.className}`}>
-                <div className="absolute inset-0 overflow-hidden rounded-[22px] bg-verde/10">
-                  <Image src={f.src} alt={f.alt} fill priority={i === 0} sizes={i === 0 ? "66vw" : "33vw"} className="object-cover" style={{ objectPosition: f.pos }} />
+                <div data-fundo={f.fundo} className="hero-tile-fundo absolute inset-0">
+                  <div className="absolute inset-0 overflow-hidden rounded-[22px] bg-verde/10 md:rounded-[28px]">
+                    <Image
+                      src={f.src}
+                      alt={f.alt}
+                      fill
+                      priority={i < 2}
+                      sizes={i === 0 ? "(min-width: 768px) 34vw, 66vw" : "(min-width: 768px) 17vw, 33vw"}
+                      className="object-cover"
+                      style={{ objectPosition: f.pos }}
+                    />
+                  </div>
+                  {i === 0 && (
+                    <>
+                      <p className="hero-etiqueta absolute top-3 left-3 rounded-full bg-leite/90 px-3 py-1 text-xs font-semibold text-verde backdrop-blur md:top-4 md:left-4 md:px-4 md:py-1.5 md:text-sm">
+                        {orange.nome} · {reais(orange.preco)}
+                      </p>
+                      <Selo id="hero-selo" className="absolute -right-4 -bottom-4 z-10 w-[84px] md:-right-6 md:-bottom-6 md:w-[clamp(96px,8vw,136px)]" />
+                    </>
+                  )}
                 </div>
-                {i === 0 && <Selo id="hero-selo-celular" className="absolute -right-4 -bottom-4 z-10 w-[84px]" />}
               </div>
             ))}
           </div>
 
-          <div className="pointer-events-auto text-verde md:text-leite">
+          <div className="pointer-events-auto text-verde md:col-span-6 md:row-start-3 md:mt-8">
             <div className="max-w-lg">
-              <p className="hero-detalhe hidden text-lg leading-relaxed text-leite/90 md:block md:text-xl">
+              <p className="hero-detalhe hidden text-xl leading-relaxed text-verde/90 md:block">
                 Cafés especiais, cozinha artesanal e um salão verde no centro de Itatiba.
               </p>
-              <div className="hero-detalhe flex flex-wrap gap-3 md:mt-5">
-                <a href="#cardapio" className="group inline-flex items-center gap-2 rounded-full bg-verde px-6 py-3 font-semibold text-leite transition-colors hover:bg-verde-escuro md:bg-laranja md:text-verde-noite md:hover:bg-leite">
+              <div className="hero-detalhe flex flex-wrap gap-3 md:mt-6">
+                <a href="#cardapio" className="group inline-flex items-center gap-2 rounded-full bg-laranja px-6 py-3 font-semibold text-verde-noite transition hover:-translate-y-0.5 hover:bg-verde hover:text-leite">
                   Ver o cardápio
                   <Seta direcao="baixo" />
                 </a>
-                <a href="#como-chegar" className="group inline-flex items-center gap-2 rounded-full px-6 py-3 font-semibold ring-1 ring-verde/40 transition-colors hover:bg-verde/10 md:ring-leite/60 md:hover:bg-leite/10">
+                <a href="#como-chegar" className="group inline-flex items-center gap-2 rounded-full px-6 py-3 font-semibold ring-1 ring-verde/40 transition-colors hover:bg-verde/10">
                   Como chegar
                   <Seta />
                 </a>
               </div>
               <ul className="mt-4 flex flex-wrap gap-x-5 gap-y-1.5 text-sm md:mt-6 md:text-base">
                 <li className="hero-detalhe flex items-center gap-2">
-                  <span className="h-2 w-2 rounded-full bg-laranja-escuro md:bg-laranja" aria-hidden />
+                  <span className="h-2 w-2 rounded-full bg-laranja-escuro" aria-hidden />
                   {horas ? `Hoje, das ${horas}` : "Todos os dias, a partir das 8h"}
                 </li>
                 <li className="hero-detalhe flex items-center gap-2">
-                  <span className="h-2 w-2 rounded-full bg-laranja-escuro md:bg-laranja" aria-hidden />
+                  <span className="h-2 w-2 rounded-full bg-laranja-escuro" aria-hidden />
                   {contato.endereco}, {contato.bairro}
                 </li>
               </ul>
@@ -258,7 +266,7 @@ export function Hero() {
             </mask>
           </defs>
           <rect width={tela.w} height={tela.h} fill={VERDE_CAPA} mask="url(#hero-furo)" />
-          <g ref={marca}>
+          <g ref={marca} className="entrada">
             <path className="fill-laranja" fillRule="evenodd" d={simbolo.anel} />
             <path className="hero-vinco fill-laranja" d={simbolo.vinco} />
           </g>
@@ -272,7 +280,7 @@ export function Hero() {
           height={600}
           priority
           sizes="(min-width: 768px) 42vw, 78vw"
-          className="hero-graos-topo pointer-events-none absolute [mask-image:linear-gradient(to_left,black_65%,transparent),linear-gradient(to_top,transparent,black_35%)] [mask-composite:intersect] -top-2 -right-2 w-[78vw] max-w-[640px] md:w-[42vw]"
+          className="hero-graos-topo entrada pointer-events-none absolute [mask-image:linear-gradient(to_left,black_65%,transparent),linear-gradient(to_top,transparent,black_35%)] [mask-composite:intersect] -top-2 -right-2 w-[78vw] max-w-[640px] md:w-[42vw]"
         />
         <Image
           src="/cardapio/capa-base.webp"
@@ -281,7 +289,7 @@ export function Hero() {
           height={615}
           priority
           sizes="(min-width: 768px) 30vw, 70vw"
-          className="hero-graos-base pointer-events-none absolute [mask-image:linear-gradient(to_right,black_60%,transparent),linear-gradient(to_bottom,transparent,black_30%)] [mask-composite:intersect] -bottom-2 -left-2 w-[70vw] max-w-[520px] md:w-[30vw]"
+          className="hero-graos-base entrada pointer-events-none absolute [mask-image:linear-gradient(to_right,black_60%,transparent),linear-gradient(to_bottom,transparent,black_30%)] [mask-composite:intersect] -bottom-2 -left-2 w-[70vw] max-w-[520px] md:w-[30vw]"
         />
 
         {/* Nome, como na capa: "flanar" claro e "café" laranja */}
@@ -289,7 +297,7 @@ export function Hero() {
           <svg viewBox={`0 0 ${wordmark.w} ${wordmark.h}`} className="hero-nome h-[13vw] w-auto md:h-[min(9vw,13svh)]">
             <path className="fill-leite stroke-leite" strokeWidth={wordmark.peso} strokeLinejoin="round" d={wordmark.d} />
           </svg>
-          <p className="hero-cafe display-soft mt-2 text-[6vw] text-laranja md:text-[min(3vw,4.4svh)]">café</p>
+          <p className="hero-cafe entrada display-soft mt-2 text-[6vw] text-laranja md:text-[min(3vw,4.4svh)]">café</p>
         </div>
       </div>
     </section>
