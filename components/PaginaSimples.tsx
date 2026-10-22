@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { contato } from "@/lib/content";
 import { Logo } from "./Logo";
+import { Credito } from "./Credito";
 
 // Moldura das páginas internas (privacidade, 404): só o logo e o caminho de volta,
 // sem o menu de âncoras da página inicial.
@@ -25,9 +26,12 @@ export function PaginaSimples({ children, escura }: { children: React.ReactNode;
           <p>
             © {new Date().getFullYear()} Flanar Café · {contato.endereco}, {contato.bairro}
           </p>
-          <Link href="/privacidade" className="underline-offset-4 hover:underline">
-            Política de privacidade
-          </Link>
+          <div className="flex flex-wrap gap-x-5 gap-y-2">
+            <Link href="/privacidade" className="underline-offset-4 hover:underline">
+              Política de privacidade
+            </Link>
+            <Credito />
+          </div>
         </div>
       </footer>
     </div>

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { contato, nav } from "@/lib/content";
 import { LogoVertical } from "./Logo";
+import { Credito } from "./Credito";
 import { AnimacoesRodape } from "./Animacoes";
 
 export function Rodape() {
@@ -44,12 +45,15 @@ export function Rodape() {
         ))}
       </p>
 
-      <p className="mt-6 text-center text-sm text-areia/90">
-        © {new Date().getFullYear()} Flanar Café ·{" "}
-        <Link href="/privacidade" className="underline-offset-4 hover:text-laranja hover:underline">
-          Política de privacidade
-        </Link>
-      </p>
+      <div className="mt-6 flex flex-col items-center gap-2 text-center text-sm text-areia/90 md:flex-row md:justify-between">
+        <p>
+          © {new Date().getFullYear()} Flanar Café ·{" "}
+          <Link href="/privacidade" className="underline-offset-4 hover:text-laranja hover:underline">
+            Política de privacidade
+          </Link>
+        </p>
+        <Credito className="hover:text-laranja" />
+      </div>
     </footer>
   );
 }

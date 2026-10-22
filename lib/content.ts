@@ -9,6 +9,9 @@ export const site = {
     "Café especial, focaccia artesanal, waffle de Liège e um salão verde pra ficar sem pressa no centro de Itatiba. Vem viver seu momento flanar.",
 };
 
+// Quem desenvolveu o site (crédito no rodapé e nos metadados).
+export const desenvolvedor = { nome: "senerine.dev", url: "https://www.senerinedev.com.br" };
+
 // Dados do perfil do Google e do Instagram da Flanar.
 export const contato = {
   endereco: "Rua Santa Clara, 90",

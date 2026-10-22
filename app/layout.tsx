@@ -3,7 +3,7 @@ import { Bricolage_Grotesque, Instrument_Sans } from "next/font/google";
 import "lenis/dist/lenis.css";
 import "./globals.css";
 import { SmoothScroll } from "@/components/SmoothScroll";
-import { site } from "@/lib/content";
+import { desenvolvedor, site } from "@/lib/content";
 
 const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
@@ -26,6 +26,8 @@ export const metadata: Metadata = {
   },
   description: site.descricao,
   applicationName: site.nome,
+  authors: [{ name: desenvolvedor.nome, url: desenvolvedor.url }],
+  creator: desenvolvedor.nome,
   keywords: [
     "Flanar Café",
     "café em Itatiba",
