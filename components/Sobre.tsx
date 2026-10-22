@@ -10,21 +10,18 @@ const fotos = [
   {
     src: "/pessoas/barista.jpg",
     alt: "Atendente da Flanar sorrindo enquanto passa a maquininha para uma cliente no balcão",
-    legenda: "No balcão",
     posicao: "row-span-2",
     pos: "40% 45%",
   },
   {
     src: "/pessoas/cliente-shake.jpg",
     alt: "Cliente sorrindo com um shake no copo canelado, encostada na parede verde",
-    legenda: "Hora do shake",
     posicao: "aspect-[4/5]",
     pos: "45% 30%",
   },
   {
     src: "/pessoas/cliente-vem-verao.jpg",
     alt: "Cliente brindando com o Vem Verão, ao lado de uma planta",
-    legenda: "Um brinde de Vem verão",
     posicao: "aspect-[4/5]",
     pos: "55% 30%",
   },
@@ -82,7 +79,7 @@ export function Sobre() {
 
         <div className="sobre-fotos grid grid-cols-2 gap-3 self-start md:col-span-5 md:gap-4">
           {fotos.map((f) => (
-            <figure key={f.src} className={`group relative ${f.posicao}`}>
+            <div key={f.src} className={`group relative ${f.posicao}`}>
               <div className="sobre-foto absolute inset-0 overflow-hidden rounded-[28px] md:rounded-[32px]">
                 <div className="sobre-revela absolute inset-0">
                   {/* Zoom do mouse num invólucro próprio: a foto em si é animada pelo GSAP. */}
@@ -90,11 +87,8 @@ export function Sobre() {
                     <Image src={f.src} alt={f.alt} fill sizes="(min-width: 768px) 22vw, 50vw" className="object-cover" style={{ objectPosition: f.pos }} />
                   </div>
                 </div>
-                <figcaption className="absolute bottom-3 left-3 rounded-full bg-leite/90 px-3 py-1 text-xs font-semibold text-verde backdrop-blur transition-transform duration-500 ease-out group-hover:-translate-y-1 md:bottom-4 md:left-4 md:text-sm">
-                  {f.legenda}
-                </figcaption>
               </div>
-            </figure>
+            </div>
           ))}
         </div>
       </div>
