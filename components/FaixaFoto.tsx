@@ -9,11 +9,11 @@ export function FaixaFoto() {
       <AnimacoesFaixaFoto />
       <div className="faixafoto-imagem absolute -inset-y-[12%] inset-x-0">
         <Image
-          src="/fotos/waffle-frutas.jpg"
-          alt="Waffle de Liège com geleia de frutas vermelhas, uva, laranja e açúcar de confeiteiro"
+          src="/fotos/waffle-geleia-latte.jpg"
+          alt="Waffle de Liège com geleia de frutas vermelhas e açúcar de confeiteiro no prato verde"
           fill
           sizes="100vw"
-          className="object-cover object-[50%_58%]"
+          className="object-cover object-[50%_62%]"
         />
       </div>
       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-black/10" />

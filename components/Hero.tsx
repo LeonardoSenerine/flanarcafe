@@ -4,7 +4,6 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { simbolo, wordmark } from "@/lib/logo";
-import { grupos, reais } from "@/lib/cardapio";
 import { contato } from "@/lib/content";
 import { Simbolo } from "./Logo";
 import { Seta } from "./Seta";
@@ -15,26 +14,27 @@ const graoExterno = simbolo.anel.slice(0, simbolo.anel.indexOf("M", 1));
 // Mesmo verde da capa do cardápio impresso, para os grãos desenhados emendarem.
 const VERDE_CAPA = "#3b4c29";
 
-const orange = grupos.flatMap((g) => g.itens).find((i) => i.nome === "Orange coffee")!;
-
-// Colagem: o Orange coffee grande e os pratos da casa em volta, todos na mesma
-// forma, numa grade de 3x3. "fundo" é a profundidade do efeito do mouse (desktop).
+// Colagem: o waffle com frutas grande e os destaques da casa em volta, todos na
+// mesma forma, numa grade de 3x3. Escolhidas entre as fotos mais nítidas do
+// acervo. "fundo" é a profundidade do efeito do mouse (desktop). A primeira fica
+// por cima (z-10) porque carrega o selo, que invade o cruzamento das fotos.
 const colagem = [
-  { src: "/fotos/drink-laranja-camadas.jpg", alt: "Orange coffee em camadas no copo canelado", className: "col-span-2 row-span-2", pos: "50% 60%", fundo: 6 },
-  { src: "/fotos/waffle-frutas.jpg", alt: "Waffle de Liège com frutas", className: "", pos: "50% 50%", fundo: 14 },
-  { src: "/fotos/pao-de-queijo.jpg", alt: "Mini pães de queijo", className: "", pos: "40% 50%", fundo: 10 },
-  { src: "/fotos/ovos-mexidos.jpg", alt: "Ovos mexidos com cebolinha", className: "", pos: "50% 60%", fundo: 12 },
-  { src: "/fotos/trio-cafes.jpg", alt: "Cappuccinos e café com leite na caneca verde da Flanar", className: "col-span-2", pos: "50% 62%", fundo: 8 },
+  { src: "/fotos/waffle-frutas.jpg", alt: "Waffle de Liège com geleia de frutas vermelhas, uva, morango e laranja", className: "z-10 col-span-2 row-span-2", pos: "50% 55%", fundo: 6 },
+  { src: "/fotos/chocolate-quente-chantilly.jpg", alt: "Chocolate quente com chantilly", className: "", pos: "50% 35%", fundo: 14 },
+  { src: "/fotos/drink-laranja-camadas.jpg", alt: "Orange coffee em camadas no copo canelado", className: "", pos: "50% 62%", fundo: 10 },
+  { src: "/fotos/pao-de-queijo-doce-de-leite.jpg", alt: "Pão de queijo com doce de leite", className: "", pos: "50% 50%", fundo: 12 },
+  { src: "/fotos/bandeja-chocolate-gelado-queijo-quente.jpg", alt: "Chocolate gelado com chantilly e queijo quente na bandeja de madeira", className: "col-span-2", pos: "50% 62%", fundo: 8 },
 ];
 
 // Sem JavaScript, mostra o hero pronto (as animações começam escondidas no CSS).
 const semScript = ".hero-final{visibility:visible!important}.hero-intro{display:none}.entrada,.cabecalho-entrada{visibility:visible!important}";
 
-// Selo laranja com texto girando em volta do grão.
+// Selo laranja com texto girando em volta do grão. O posicionamento fica no
+// invólucro de fora: o GSAP anima o de dentro e apagaria o translate do Tailwind.
 function Selo({ id, className }: { id: string; className: string }) {
   return (
-    <div className={`hero-selo ${className}`}>
-      <div className="relative aspect-square rounded-full bg-laranja text-verde shadow-[0_18px_40px_-18px_rgba(0,0,0,0.6)]">
+    <div className={className}>
+      <div className="hero-selo relative aspect-square rounded-full bg-laranja text-verde ring-[6px] ring-areia-claro md:ring-8">
         <svg viewBox="0 0 100 100" className="hero-selo-texto absolute inset-0 h-full w-full" aria-hidden>
           <defs>
             <path id={id} d="M50 50m-37 0a37 37 0 1 1 74 0a37 37 0 1 1 -74 0" />
@@ -131,8 +131,7 @@ export function Hero() {
         tl.addLabel("final", "entrar+=1.2")
           .from(".hero-linha", { yPercent: 110, duration: 1.1, stagger: 0.12 }, "final")
           .from(".hero-detalhe", { y: 24, autoAlpha: 0, duration: 0.9, stagger: 0.08 }, "final+=0.35")
-          .from(".hero-selo", { scale: 0, rotate: -120, duration: 1.4 }, "final+=0.3")
-          .from(".hero-etiqueta", { y: -10, autoAlpha: 0, duration: 0.8 }, "final+=0.5");
+          .from(".hero-selo", { scale: 0, rotate: -120, duration: 1.4 }, "final+=0.3");
 
         // Quem já quer descer não precisa esperar: qualquer gesto acelera a entrada.
         const pressa = () => tl.timeScale(3.5);
@@ -198,9 +197,9 @@ export function Hero() {
             </span>
           </h1>
 
-          <div className="grid min-h-0 flex-1 grid-cols-3 grid-rows-3 gap-2.5 md:col-span-6 md:col-start-7 md:row-span-4 md:row-start-1 md:gap-4" aria-hidden>
+          <div className="hero-grade pointer-events-auto grid min-h-0 flex-1 gap-2.5 md:col-span-6 md:col-start-7 md:row-span-4 md:row-start-1 md:gap-4" aria-hidden>
             {colagem.map((f, i) => (
-              <div key={f.src} className={`hero-tile relative ${f.className}`}>
+              <div key={f.src} className={`hero-tile hero-tile-${i + 1} relative ${f.className}`}>
                 <div data-fundo={f.fundo} className="hero-tile-fundo absolute inset-0">
                   <div className="absolute inset-0 overflow-hidden rounded-[22px] bg-verde/10 md:rounded-[28px]">
                     <Image
@@ -213,13 +212,12 @@ export function Hero() {
                       style={{ objectPosition: f.pos }}
                     />
                   </div>
+                  {/* Selo preso no cruzamento das linhas da grade (canto da foto grande + metade do espaço entre as fotos) */}
                   {i === 0 && (
-                    <>
-                      <p className="hero-etiqueta absolute top-3 left-3 rounded-full bg-leite/90 px-3 py-1 text-xs font-semibold text-verde backdrop-blur md:top-4 md:left-4 md:px-4 md:py-1.5 md:text-sm">
-                        {orange.nome} · {reais(orange.preco)}
-                      </p>
-                      <Selo id="hero-selo" className="absolute -right-4 -bottom-4 z-10 w-[84px] md:-right-6 md:-bottom-6 md:w-[clamp(96px,8vw,136px)]" />
-                    </>
+                    <Selo
+                      id="hero-selo"
+                      className="absolute right-0 bottom-0 z-10 w-[84px] translate-x-[calc(50%+5px)] translate-y-[calc(50%+5px)] md:w-[clamp(96px,8vw,128px)] md:translate-x-[calc(50%+8px)] md:translate-y-[calc(50%+8px)]"
+                    />
                   )}
                 </div>
               </div>

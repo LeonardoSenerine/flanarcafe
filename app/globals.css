@@ -114,3 +114,46 @@
     visibility: visible;
   }
 }
+
+/* Colagem do hero: ao passar o mouse numa foto, as linhas e colunas da grade
+   mudam de tamanho, então ela cresce e as outras encolhem sem sair da grade.
+   Todas as faixas usam minmax(0, Nfr) para o navegador conseguir animar. */
+.hero-grade {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
+  transition:
+    grid-template-columns 700ms cubic-bezier(0.22, 1, 0.36, 1),
+    grid-template-rows 700ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+@media (hover: hover) and (pointer: fine) {
+  /* 1: waffle (2 colunas x 2 linhas, em cima à esquerda) */
+  .hero-grade:has(.hero-tile-1:hover) {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.2fr) minmax(0, 0.6fr);
+    grid-template-rows: minmax(0, 1.2fr) minmax(0, 1.2fr) minmax(0, 0.6fr);
+  }
+  /* 2: chocolate quente (coluna 3, linha 1) */
+  .hero-grade:has(.hero-tile-2:hover) {
+    grid-template-columns: minmax(0, 0.75fr) minmax(0, 0.75fr) minmax(0, 1.5fr);
+    grid-template-rows: minmax(0, 1.5fr) minmax(0, 0.75fr) minmax(0, 0.75fr);
+  }
+  /* 3: Orange coffee (coluna 3, linha 2) */
+  .hero-grade:has(.hero-tile-3:hover) {
+    grid-template-columns: minmax(0, 0.75fr) minmax(0, 0.75fr) minmax(0, 1.5fr);
+    grid-template-rows: minmax(0, 0.75fr) minmax(0, 1.5fr) minmax(0, 0.75fr);
+  }
+  /* 4: pão de queijo (coluna 1, linha 3) */
+  .hero-grade:has(.hero-tile-4:hover) {
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 0.75fr) minmax(0, 0.75fr);
+    grid-template-rows: minmax(0, 0.75fr) minmax(0, 0.75fr) minmax(0, 1.5fr);
+  }
+  /* 5: bandeja (colunas 2 e 3, linha 3) */
+  .hero-grade:has(.hero-tile-5:hover) {
+    grid-template-columns: minmax(0, 0.6fr) minmax(0, 1.2fr) minmax(0, 1.2fr);
+    grid-template-rows: minmax(0, 0.75fr) minmax(0, 0.75fr) minmax(0, 1.5fr);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-grade {
+    transition: none;
+  }
+}
